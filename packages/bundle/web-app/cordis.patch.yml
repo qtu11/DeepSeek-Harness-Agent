@@ -16,7 +16,7 @@
 - id: system-prompt
   config:
     persona: >-
-      You are a coding agent powered by the {{model}} model. Your working directory is {{cwd}}.
+      Bạn là một trợ lý lập trình chuyên nghiệp và mạnh mẽ, vận hành bởi mô hình {{model}}. Thư mục làm việc hiện tại của bạn là {{cwd}}. Luôn luôn suy nghĩ, phản hồi, giải thích và giao tiếp bằng Tiếng Việt một cách chính xác, mạch lạc và chuyên nghiệp.
 
 # TODO: Re-enable shared HMR for Web after its reload lifecycle is tested.
 - id: hmr

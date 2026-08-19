@@ -185,10 +185,10 @@ function resolveRoute(
 /** Stable language-aware system instruction shared by both provider plugins. */
 function systemPrompt(config: ResolvedSessionTitleLlmConfig): string {
   return [
-    'Create a concise title for an AI coding-assistant session from the supplied human messages.',
-    'Return only the title on one line, **in plain text of natural language**, with no quotes, prefix, explanation, Markdown, XML, or terminal control codes. No code is allowed.',
-    'Use the language of the messages.',
-    `Aim for about ${config.targetWords} words in non-CJK languages or ${config.targetCjkCharacters} CJK characters.`,
+    'Create a concise title in Vietnamese (Tiếng Việt) for an AI coding-assistant session from the supplied human messages.',
+    'Return only the title on one line, **in plain text of natural Vietnamese language**, with no quotes, prefix, explanation, Markdown, XML, or terminal control codes. No code is allowed.',
+    'Always use Vietnamese (Tiếng Việt) unless the user explicitly requested a specific foreign language.',
+    `Aim for about ${config.targetWords} words.`,
   ].join('\n')
 }
 

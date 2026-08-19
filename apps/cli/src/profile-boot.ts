@@ -22,6 +22,7 @@ import {
   composeEntries,
   healProfilesModuleFallback,
   installFailLoud,
+  loadLayeredEnv,
   loadOptionalPatches,
   loadOverlayPatches,
   loadProfile,
@@ -207,6 +208,7 @@ function suppressShutdownError(ctx: Context, signal: AbortSignal, error: unknown
  */
 export async function runProfile(options: RunProfileOptions): Promise<{ ctx: Context; shutdown: ProcessShutdown }> {
   const ds2apiDisposer = await ensureDs2ApiRunning()
+  const effectiveEnv = loadLayeredEnv(NAME)
   const composed = composeProfile(options.profile, options.patchFiles)
   const app: { current?: Context } = {}
   const shutdown = createProcessShutdown(async () => {
@@ -255,7 +257,7 @@ export async function runProfile(options: RunProfileOptions): Promise<{ ctx: Con
     app.current = hostCtx
     // Before any config-tree entry mounts, so plugins resolve all launch-time
     // environment values from the same immutable provenance snapshot.
-    hostCtx.provide(DSH_LAUNCH_ENVIRONMENT_KEY, options.environment)
+    hostCtx.provide(DSH_LAUNCH_ENVIRONMENT_KEY, effectiveEnv)
     // The command line and bounded exit request are launcher facts available
     // to every app plugin that injects the argument snapshot.
     provideCmdline(hostCtx, {

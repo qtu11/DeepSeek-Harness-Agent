@@ -27,6 +27,7 @@ tmp/
 mise.toml
 dist-exe/
 dist-app/
+data/
 *.log
 
 python/sdk-runtime/src/deepseek_harness_runtime/runtime/dsh-jsonrpc-agent-*

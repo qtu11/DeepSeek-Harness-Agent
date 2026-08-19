@@ -87,7 +87,7 @@ declare module '@deepseek-ai/cordis' {
 }
 
 /** Fallback locale consulted after the active locale misses (also the last-resort initial locale). */
-export const FALLBACK_LOCALE: LocaleId = 'zh'
+export const FALLBACK_LOCALE: LocaleId = 'vi'
 
 /** Shared namespace for shell-level texts. */
 export const COMMON_NS = 'common'
@@ -97,9 +97,9 @@ export const SETTINGS_NS = 'settings.locale'
 
 /** The shipped locales. */
 const LOCALES: readonly LocaleDefinition[] = Object.freeze([
-  { id: 'zh', label: '中文' },
-  { id: 'en', label: 'English' },
   { id: 'vi', label: 'Tiếng Việt' },
+  { id: 'en', label: 'English' },
+  { id: 'zh', label: '中文' },
 ])
 
 /**

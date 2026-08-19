@@ -131,12 +131,8 @@ export async function ensureDs2ApiRunning(): Promise<() => void> {
     process.env.DEEPSEEK_BASE_URL?.includes(String(DS2API_DEFAULT_PORT))
 
   if (shouldUseDs2Api) {
-    if (!process.env.DEEPSEEK_BASE_URL || process.env.DEEPSEEK_BASE_URL.includes('api.deepseek.com')) {
-      process.env.DEEPSEEK_BASE_URL = DS2API_DEFAULT_BASE_URL
-    }
-    if (!process.env.DEEPSEEK_API_KEY || !process.env.DEEPSEEK_API_KEY.startsWith('sk-')) {
-      process.env.DEEPSEEK_API_KEY = DS2API_LOCAL_KEY
-    }
+    process.env.DEEPSEEK_BASE_URL = DS2API_DEFAULT_BASE_URL
+    process.env.DEEPSEEK_API_KEY = DS2API_LOCAL_KEY
   }
 
   // If already running, no need to spawn duplicate instance

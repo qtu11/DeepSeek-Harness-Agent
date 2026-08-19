@@ -25,3 +25,9 @@ Terminal 2 (Chạy dev frontend):
 powershell
 
 pnpm run dev:web
+
+
+
+
+
+git push --no-verify -u origin main
