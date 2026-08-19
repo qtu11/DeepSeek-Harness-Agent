@@ -251,6 +251,14 @@
     fetch: false
     searchTimeoutMs: 60000
 
+# ── browser automation & visual inspection ──────────────────────────────────
+- id: tool-browser
+  name: '@deepseek-ai/dsh-tool-browser'
+  config:
+    enabled: true
+    headless: false
+    defaultTimeoutMs: 30000
+
 # ── long-term memory (MemOS 2.0) ─────────────────────────────────────────────
 - id: memos-local-memory
   name: '@memtensor/memos-local-plugin/dist/adapters/deepseek-harness/index.js'

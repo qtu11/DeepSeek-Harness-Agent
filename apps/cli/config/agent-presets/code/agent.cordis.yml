@@ -252,6 +252,14 @@
     fetch: false
     searchTimeoutMs: 60000
 
+# ── browser automation & visual inspection ──────────────────────────────────
+- id: tool-browser
+  name: '@deepseek-ai/dsh-tool-browser'
+  config:
+    enabled: true
+    headless: false
+    defaultTimeoutMs: 30000
+
 # ── presentation ────────────────────────────────────────────────────────────
 
 # Code Mode for this agent alone. The row waits for the host's `codeRuntime`

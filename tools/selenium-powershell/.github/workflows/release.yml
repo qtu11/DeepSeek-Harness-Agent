@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ApiKey: ${{ secrets.API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Publish
+        run: |
+          pwsh -Command "Publish-Module -Path ${{ github.workspace }}/Output/Selenium/ -NuGetApiKey ${{secrets.API_KEY}}"

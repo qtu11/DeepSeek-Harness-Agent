@@ -1,0 +1,111 @@
+//! `display()` dual-channel routing.
+//!
+//! Text and JSON displays stream as progress messages and remain in the final
+//! `displays` array. Images are final-array only.
+
+use std::sync::Arc;
+
+use serde_json::Value;
+
+const MAX_PROGRESS_MESSAGE_BYTES: usize = 4096;
+
+/// Progress frame sent to an optional streaming sink.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ProgressFrame {
+    /// Monotonic counter for the current exec.
+    pub progress: u64,
+    /// User-facing progress message.
+    pub message: String,
+}
+
+/// Display progress sink.
+pub type ProgressSink = Arc<dyn Fn(ProgressFrame) + Send + Sync + 'static>;
+
+/// Display payload class.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DisplayKind {
+    /// String display.
+    Text,
+    /// JSON-compatible object/array/primitive display.
+    Json,
+    /// Image payload. Not streamed.
+    Image,
+}
+
+/// Classify a kernel display frame.
+pub fn classify(payload_type: &str) -> DisplayKind {
+    match payload_type {
+        "image" => DisplayKind::Image,
+        "json" => DisplayKind::Json,
+        _ => DisplayKind::Text,
+    }
+}
+
+/// Convert display payload to a progress message. Returns `None` for images.
+pub fn to_stream_message(kind: DisplayKind, value: &Value) -> Option<String> {
+    let message = match kind {
+        DisplayKind::Image => None,
+        DisplayKind::Text => Some(match value {
+            Value::String(text) => text.clone(),
+            other => other.to_string(),
+        }),
+        DisplayKind::Json => Some(value.to_string()),
+    }?;
+    Some(truncate_progress_message(message))
+}
+
+fn truncate_progress_message(message: String) -> String {
+    if message.len() <= MAX_PROGRESS_MESSAGE_BYTES {
+        return message;
+    }
+    let omitted = message.len() - MAX_PROGRESS_MESSAGE_BYTES;
+    let mut end = MAX_PROGRESS_MESSAGE_BYTES;
+    while !message.is_char_boundary(end) {
+        end -= 1;
+    }
+    format!("{}\n... truncated {} bytes ...", &message[..end], omitted)
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use super::*;
+
+    #[test]
+    fn classify_maps_known_payload_types_and_defaults_to_text() {
+        assert_eq!(classify("image"), DisplayKind::Image);
+        assert_eq!(classify("json"), DisplayKind::Json);
+        assert_eq!(classify("text"), DisplayKind::Text);
+        assert_eq!(classify("anything-else"), DisplayKind::Text);
+    }
+
+    #[test]
+    fn stream_message_formats_text_and_json_but_suppresses_images() {
+        assert_eq!(
+            to_stream_message(DisplayKind::Text, &json!("hello")),
+            Some("hello".to_string())
+        );
+        assert_eq!(
+            to_stream_message(DisplayKind::Text, &json!({ "ok": true })),
+            Some(r#"{"ok":true}"#.to_string())
+        );
+        assert_eq!(
+            to_stream_message(DisplayKind::Json, &json!({ "items": [1, 2] })),
+            Some(r#"{"items":[1,2]}"#.to_string())
+        );
+        assert_eq!(
+            to_stream_message(DisplayKind::Image, &json!("base64")),
+            None
+        );
+    }
+
+    #[test]
+    fn stream_message_truncates_without_splitting_utf8() {
+        let message = "é".repeat(MAX_PROGRESS_MESSAGE_BYTES);
+        let streamed = to_stream_message(DisplayKind::Text, &json!(message)).unwrap();
+
+        assert!(streamed.contains("truncated"));
+        assert!(streamed.is_char_boundary(streamed.find('\n').unwrap()));
+    }
+}
