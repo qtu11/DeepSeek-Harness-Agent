@@ -96,12 +96,24 @@ async function startBackendIfNeeded() {
   loadEnv();
   process.env.PORT = WEB_PORT;
 
-  backendProcess = spawn('node', ['--import', 'tsx/esm', 'apps/cli/src/bin.ts', 'web', '--port', WEB_PORT], {
-    cwd: ROOT_DIR,
-    env: { ...process.env, PORT: WEB_PORT },
-    stdio: 'ignore',
-    windowsHide: true,
-  });
+  const binJs = path.join(ROOT_DIR, 'apps', 'cli', 'lib', 'bin.js');
+  const binTs = path.join(ROOT_DIR, 'apps', 'cli', 'src', 'bin.ts');
+
+  if (fs.existsSync(binJs)) {
+    backendProcess = spawn('node', [binJs, 'web', '--port', WEB_PORT], {
+      cwd: ROOT_DIR,
+      env: { ...process.env, PORT: WEB_PORT },
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+  } else {
+    backendProcess = spawn('node', ['--import', 'tsx/esm', binTs, 'web', '--port', WEB_PORT], {
+      cwd: ROOT_DIR,
+      env: { ...process.env, PORT: WEB_PORT },
+      stdio: 'ignore',
+      windowsHide: true,
+    });
+  }
 
   backendProcess.on('error', (err) => {
     console.error('Failed to start backend:', err);
