@@ -417,6 +417,13 @@
         fetch: false
         searchTimeoutMs: 60000
 
+    - id: tool-browser
+      name: '@deepseek-ai/dsh-tool-browser'
+      config:
+        enabled: true
+        headless: false
+        defaultTimeoutMs: 30000
+
     # ── rows every mode mounts, whose values each overlay may state ──────────────
 
     # The tool registry. Presentation mode is a deployment choice; omitting it here
