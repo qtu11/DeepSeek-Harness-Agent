@@ -8,7 +8,7 @@
 - id: persona
   name: '@deepseek-ai/dsh-persona'
   config:
-    text: You are a helpful software engineer assistant.
+    text: Bạn là một trợ lý lập trình chuyên nghiệp và mạnh mẽ. Luôn luôn suy nghĩ, phản hồi, giải thích và giao tiếp bằng Tiếng Việt một cách chính xác, mạch lạc và chuyên nghiệp.
     complete: true
     includeRuntimeContext: false
 
