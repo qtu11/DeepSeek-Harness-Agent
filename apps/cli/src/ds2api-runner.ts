@@ -35,7 +35,7 @@ interface Ds2ApiConfig {
 /**
  * Synchronize config.json for ds2api from environment variables.
  */
-function syncDs2ApiConfig(): void {
+function syncDs2ApiConfig(): Ds2ApiConfig {
   let config: Ds2ApiConfig = {}
   if (existsSync(DS2API_CONFIG)) {
     try {
@@ -76,13 +76,12 @@ function syncDs2ApiConfig(): void {
   }
 
   // Ensure models alias
-  if (!config.model_aliases) {
-    config.model_aliases = {
-      'deepseek-v4-flash': 'deepseek-v4-flash',
-      'deepseek-v4-pro': 'deepseek-v4-pro',
-      'deepseek-chat': 'deepseek-v4-flash',
-      'deepseek-reasoner': 'deepseek-v4-pro',
-    }
+  config.model_aliases = {
+    'deepseek-v4-flash': 'deepseek-v4-flash',
+    'deepseek-v4-pro': 'deepseek-v4-flash',
+    'deepseek-chat': 'deepseek-v4-flash',
+    'deepseek-reasoner': 'deepseek-v4-flash',
+    ...config.model_aliases,
   }
 
   if (!config.runtime) {
@@ -95,18 +94,45 @@ function syncDs2ApiConfig(): void {
   }
 
   writeFileSync(DS2API_CONFIG, JSON.stringify(config, null, 2), 'utf8')
+
+  return config
 }
 
 /**
- * Check if ds2api is already responding on its port.
+ * Check if ds2api is already responding with HTTP 200 OK.
  */
-async function isDs2ApiReady(port: number = DS2API_DEFAULT_PORT): Promise<boolean> {
+async function isDs2ApiWorking(port: number = DS2API_DEFAULT_PORT): Promise<boolean> {
   try {
     const res = await fetch(`http://127.0.0.1:${port}/v1/models`, {
       headers: { Authorization: `Bearer ${DS2API_LOCAL_KEY}` },
       signal: AbortSignal.timeout(1500),
     })
-    return res.ok || res.status === 401 || res.status === 200
+    return res.ok || res.status === 200
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Push updated config dynamically to running ds2api instance.
+ */
+async function reloadRunningDs2Api(port: number, cfg: Ds2ApiConfig): Promise<boolean> {
+  try {
+    const res = await fetch(`http://127.0.0.1:${port}/admin/config`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer admin',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accounts: cfg.accounts,
+        api_keys: cfg.api_keys,
+        keys: cfg.keys,
+        model_aliases: cfg.model_aliases,
+      }),
+      signal: AbortSignal.timeout(2000),
+    })
+    return res.ok
   } catch {
     return false
   }
@@ -122,7 +148,7 @@ export async function ensureDs2ApiRunning(): Promise<() => void> {
     return () => {}
   }
 
-  syncDs2ApiConfig()
+  const syncedConfig = syncDs2ApiConfig()
 
   const shouldUseDs2Api = process.env.DS2API_ENABLED === 'true' ||
     process.env.DS2API_ENABLED === '1' ||
@@ -135,9 +161,10 @@ export async function ensureDs2ApiRunning(): Promise<() => void> {
     process.env.DEEPSEEK_API_KEY = DS2API_LOCAL_KEY
   }
 
-  // If already running, no need to spawn duplicate instance
-  if (await isDs2ApiReady(DS2API_DEFAULT_PORT)) {
-    console.log(`[ds2api] Proxy đang hoạt động tại http://127.0.0.1:${DS2API_DEFAULT_PORT}/v1`)
+  // If already running, try to sync config dynamically
+  if (await isDs2ApiWorking(DS2API_DEFAULT_PORT)) {
+    await reloadRunningDs2Api(DS2API_DEFAULT_PORT, syncedConfig)
+    console.log(`[ds2api] Proxy đang hoạt động và đã đồng bộ cấu hình tại http://127.0.0.1:${DS2API_DEFAULT_PORT}/v1`)
     return () => {}
   }
 
@@ -160,7 +187,7 @@ export async function ensureDs2ApiRunning(): Promise<() => void> {
     // Wait up to 6 seconds for ds2api to become ready
     const start = Date.now()
     while (Date.now() - start < 6000) {
-      if (await isDs2ApiReady(DS2API_DEFAULT_PORT)) {
+      if (await isDs2ApiWorking(DS2API_DEFAULT_PORT)) {
         console.log(`[ds2api] Đã tự động khởi chạy ds2api tại http://127.0.0.1:${DS2API_DEFAULT_PORT}/v1`)
         break
       }
