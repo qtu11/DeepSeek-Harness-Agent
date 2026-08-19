@@ -18,3 +18,12 @@ export const en = {
   'appearance.dark': 'Dark',
   'appearance.system': 'System',
 } satisfies Record<ThemeKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'appearance.title': 'Giao diện',
+  'appearance.light': 'Sáng',
+  'appearance.dark': 'Tối',
+  'appearance.system': 'Theo hệ thống',
+} satisfies Record<ThemeKey, string>
+

@@ -1,0 +1,27 @@
+Khởi chạy giao diện Web UI:
+powershell
+
+pnpm dsh web
+
+Tùy chọn chỉ định cổng riêng nếu cổng mặc định bị trùng:
+
+powershell
+
+pnpm dsh web --port 8080
+
+Khởi chạy tác vụ trực tiếp trên dòng lệnh (Headless mode):
+powershell
+
+pnpm dsh --profile headless "Viết một hàm kiểm tra số nguyên tố bằng TypeScript"
+
+Chế độ phát triển giao diện có Hot Module Replacement (HMR):
+
+Terminal 1 (Chạy server backend):
+powershell
+
+pnpm dsh web
+
+Terminal 2 (Chạy dev frontend):
+powershell
+
+pnpm run dev:web

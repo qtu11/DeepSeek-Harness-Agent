@@ -21,5 +21,15 @@ export const en: Record<DeliverablesKey, string> = {
   'produced.showInFolder': 'Show in folder',
 }
 
+/** Vietnamese dictionary (same key set). */
+export const vi: Record<DeliverablesKey, string> = {
+  'produced.label': 'Sản phẩm đầu ra',
+  'produced.moreOne': '+ 1 tệp',
+  'produced.more': '+ {count} tệp',
+  'produced.open': 'Mở {name}',
+  'produced.showInFolder': 'Hiển thị trong thư mục',
+}
+
 /** Union of this namespace's dictionary keys. */
 export type DeliverablesKey = keyof typeof zh
+

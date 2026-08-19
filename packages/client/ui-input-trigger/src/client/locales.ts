@@ -24,3 +24,13 @@ export const en = {
   'loading': 'Loading…',
   'suggestions.aria': 'Trigger suggestions',
 } satisfies Record<MenuKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'command': 'Lệnh',
+  'skill': 'Kỹ năng',
+  'subagent': 'Subagent',
+  'loading': 'Đang tải…',
+  'suggestions.aria': 'Gợi ý kích hoạt',
+} satisfies Record<MenuKey, string>
+

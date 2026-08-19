@@ -22,3 +22,14 @@ export const en = {
   'openDocument.error': 'Could not open configuration file',
   'general.nav': 'General',
 } satisfies Record<SettingsKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'trigger': 'Cài đặt',
+  'title': 'Cài đặt',
+  'close': 'Đóng',
+  'openDocument': 'Mở tệp cấu hình',
+  'openDocument.error': 'Không thể mở tệp cấu hình',
+  'general.nav': 'Cài đặt chung',
+} satisfies Record<SettingsKey, string>
+

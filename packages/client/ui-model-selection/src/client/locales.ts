@@ -52,3 +52,25 @@ export const en = {
   'blocked.composer': 'This model is unavailable — select one to continue',
   'empty.efforts': 'This model provides no reasoning effort levels.',
 } satisfies Record<ModelKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'command.description': 'Chọn mô hình cho đoạn chat này',
+  'option.loadError': 'Tải danh mục thất bại: {message}',
+  'trigger.fallback': 'Chọn mô hình',
+  'trigger.selectAria': 'Chọn mô hình',
+  'trigger.aria': 'Chọn mô hình, hiện tại {model}',
+  'trigger.ariaEffort': 'Chọn mô hình, hiện tại {model}, mức suy luận {effort}',
+  'menu.aria': 'Mô hình và mức độ suy luận',
+  'menu.model': 'Mô hình',
+  'menu.effort': 'Mức suy luận',
+  'effort.providerDefault': 'Mặc định',
+  'status.loading': 'Đang làm mới danh sách mô hình…',
+  'error.action': 'Thao tác mô hình thất bại: {message}',
+  'action.reload': 'Tải lại',
+  'warning.groupLoad': 'Tải {name} thất bại: {message}',
+  'empty.models': 'Không có mô hình khả dụng.',
+  'blocked.composer': 'Mô hình này không khả dụng — vui lòng chọn một mô hình để tiếp tục',
+  'empty.efforts': 'Mô hình này không hỗ trợ các mức độ suy luận.',
+} satisfies Record<ModelKey, string>
+

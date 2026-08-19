@@ -43,3 +43,23 @@ export const en: Record<JobKey, string> = {
 
 /** Key domain of the `job` namespace (zh is the source of truth). */
 export type JobKey = keyof typeof zh
+
+/** Vietnamese dictionary, key-identical to the Chinese source of truth. */
+export const vi: Record<JobKey, string> = {
+  'count.live.one': '{count} tác vụ nền đang chạy',
+  'count.live.other': '{count} tác vụ nền đang chạy',
+  'count.idle.one': '{count} tác vụ nền',
+  'count.idle.other': '{count} tác vụ nền',
+  'list.aria': 'Tác vụ nền',
+  'status.running': 'đang chạy',
+  'status.stopping': 'đang dừng',
+  'status.completed': 'đã hoàn thành',
+  'status.killed': 'đã hủy',
+  'status.failed': 'thất bại',
+  'duration.seconds': '{seconds}s',
+  'duration.minutes': '{minutes}p {seconds}s',
+  'duration.hours': '{hours}h {minutes}p',
+  'duration.title.live': 'Đang chạy trong {duration}',
+  'duration.title.done': 'Mất {duration}',
+}
+

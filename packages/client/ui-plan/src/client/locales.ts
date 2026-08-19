@@ -18,3 +18,12 @@ export const en = {
   'chip.off.aria': 'Plan mode off, press to turn on',
   'chip.off.title': 'Plan mode off — click to turn on (/plan)',
 } satisfies Record<PlanKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'chip.on.aria': 'Chế độ lập kế hoạch đang bật, bấm để tắt',
+  'chip.on.title': 'Chế độ lập kế hoạch đang bật — bấm để tắt (/plan off)',
+  'chip.off.aria': 'Chế độ lập kế hoạch đang tắt, bấm để bật',
+  'chip.off.title': 'Chế độ lập kế hoạch đang tắt — bấm để bật (/plan)',
+} satisfies Record<PlanKey, string>
+

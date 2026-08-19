@@ -12,3 +12,9 @@ export type SettingsLocaleKey = keyof typeof zh
 export const en = {
   'language.title': 'Language',
 } satisfies Record<SettingsLocaleKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'language.title': 'Ngôn ngữ',
+} satisfies Record<SettingsLocaleKey, string>
+

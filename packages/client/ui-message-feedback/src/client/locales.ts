@@ -41,3 +41,20 @@ export const en = {
   'error.load': 'Could not load feedback',
   'error.generic': 'Could not save feedback',
 } satisfies Record<MessageFeedbackKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'action.like': 'Phản hồi tốt',
+  'action.likeActive': 'Bỏ đánh giá',
+  'action.dislike': 'Phản hồi chưa tốt',
+  'action.dislikeActive': 'Bỏ đánh giá',
+  'note.open': 'Thêm ghi chú',
+  'note.placeholder': 'Câu trả lời tốt ở đâu hoặc có vấn đề gì? (tùy chọn)',
+  'note.save': 'Lưu',
+  'note.cancel': 'Hủy',
+  'note.aria': 'Ghi chú phản hồi',
+  'error.conflict': 'Phản hồi này đã bị thay đổi ở nơi khác; hiển thị trạng thái mới nhất',
+  'error.load': 'Không thể tải phản hồi',
+  'error.generic': 'Không thể lưu phản hồi',
+} satisfies Record<MessageFeedbackKey, string>
+

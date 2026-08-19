@@ -32,3 +32,19 @@ export const en = {
   'action.edit': 'Edit goal',
   'action.clear': 'Clear goal',
 } satisfies Record<GoalKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'phase.active': 'Mục tiêu đang thực hiện',
+  'phase.paused': 'Mục tiêu đã tạm dừng',
+  'phase.blocked': 'Mục tiêu bị chặn',
+  'objective.aria': 'Nội dung mục tiêu',
+  'commandInput.aria': 'Nhập lệnh',
+  'action.save': 'Lưu mục tiêu',
+  'action.cancel': 'Hủy chỉnh sửa',
+  'action.pause': 'Tạm dừng mục tiêu',
+  'action.resume': 'Tiếp tục mục tiêu',
+  'action.edit': 'Chỉnh sửa mục tiêu',
+  'action.clear': 'Xóa mục tiêu',
+} satisfies Record<GoalKey, string>
+

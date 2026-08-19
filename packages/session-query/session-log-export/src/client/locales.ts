@@ -23,5 +23,17 @@ export const en: Record<keyof typeof zh, string> = {
   'dialog.commandFailed': 'Could not start the Session export.',
 }
 
+/** Vietnamese Session export strings. */
+export const vi: Record<keyof typeof zh, string> = {
+  'dialog.preparingTitle': 'Đang xuất đoạn chat',
+  'dialog.preparingDescription': 'Đang chuẩn bị tệp ZIP chứa đoạn chat này, các sub-session và tệp đính kèm.',
+  'dialog.successTitle': 'Đã bắt đầu tải xuống đoạn chat',
+  'dialog.successDescription': 'Trình duyệt đang tải xuống tệp ZIP của đoạn chat.',
+  'dialog.errorTitle': 'Xuất đoạn chat thất bại',
+  'dialog.close': 'Đóng',
+  'dialog.commandFailed': 'Không thể khởi động xuất đoạn chat.',
+}
+
 /** Stable locale keys consumed by the shared modal. */
 export type SessionLogDownloadKey = keyof typeof zh
+

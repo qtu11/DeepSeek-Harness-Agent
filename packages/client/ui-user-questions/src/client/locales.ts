@@ -40,3 +40,23 @@ export const en = {
   'plan.decline': 'Refuse',
   'plan.discuss': 'Chat about it',
 } satisfies Record<QuestionKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'error.incomplete': 'Vui lòng hoàn thành câu hỏi này trước.',
+  'error.unanswered': 'Vui lòng chọn một phương án hoặc nhập câu trả lời tùy chỉnh.',
+  'nav.prev': 'Câu trước',
+  'nav.next': 'Câu tiếp theo',
+  'nav.minimize': 'Thu gọn thẻ câu hỏi',
+  'nav.maximize': 'Mở rộng thẻ câu hỏi',
+  'nav.cancel': 'Bỏ qua toàn bộ câu hỏi',
+  'option.recommended': 'Đề xuất',
+  'custom.placeholder': 'Nhập câu trả lời của bạn',
+  'action.skip': 'Bỏ qua câu này',
+  'action.next': 'Tiếp theo',
+  'plan.header': 'Duyệt kế hoạch',
+  'plan.approve': 'Duyệt thực thi',
+  'plan.decline': 'Từ chối',
+  'plan.discuss': 'Thảo luận trong đoạn chat',
+} satisfies Record<QuestionKey, string>
+

@@ -24,3 +24,15 @@ export const en = {
   'overlay.aria': '/{command} options',
   'listbox.aria': '/{command} matches',
 } satisfies Record<CommandKey, string>
+
+/** Vietnamese dictionary, checked complete against the zh key set. */
+export const vi = {
+  'search.placeholder': 'Tìm kiếm…',
+  'search.aria': 'Lọc tùy chọn',
+  'status.loading': 'Đang tải tùy chọn…',
+  'status.applying': 'Đang áp dụng…',
+  'status.empty': 'Không có tùy chọn',
+  'overlay.aria': 'Tùy chọn /{command}',
+  'listbox.aria': 'Mục khớp /{command}',
+} satisfies Record<CommandKey, string>
+

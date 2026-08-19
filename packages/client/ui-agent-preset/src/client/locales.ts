@@ -141,6 +141,72 @@ export const zh: Record<AgentPresetSettingsKey, string> = {
   deleting: '正在删除…',
 }
 
+/** Vietnamese copy. */
+export const vi: Record<AgentPresetSettingsKey, string> = {
+  title: 'Mẫu cấu hình Agent',
+  description: 'Áp dụng cho các đoạn chat bạn tạo từ bây giờ. Các đoạn chat đang chạy sẽ giữ nguyên mẫu cấu hình lúc bắt đầu.',
+  loading: 'Đang tải mẫu cấu hình…',
+  error: 'Không thể tải mẫu cấu hình Agent.',
+  userTrust: 'Tùy chỉnh',
+  seatHint: 'Mẫu cấu hình Agent cho đoạn chat sắp bắt đầu',
+  headerHint: 'Mẫu cấu hình Agent mà đoạn chat này đang chạy, cố định khi khởi tạo',
+  nav: 'Mẫu cấu hình Agent',
+  sectionIntro:
+    'Mẫu cấu hình là tổ hợp plugin mà Agent của một đoạn chat thực thi — công cụ, prompt và năng lực của nó. '
+    + 'Nhân bản một mẫu có sẵn để chỉnh sửa, hoặc dùng Chế độ Sáng tạo để Agent tạo giúp bạn.',
+  builtIn: 'Tích hợp sẵn',
+  setDefault: 'Đặt làm mặc định',
+  view: 'Xem',
+  presetStandardName: 'Chế độ Chuẩn',
+  presetStandardDescription:
+    'Agent lập trình đầy đủ tính năng: chỉnh sửa tệp tin, shell, tìm kiếm tệp và web, kỹ năng, lập kế hoạch, mục tiêu, subagent và quy trình làm việc.',
+  presetCodeName: 'Chế độ PTC',
+  presetCodeDescription:
+    'Đầy đủ năng lực của Chế độ Chuẩn, với các công cụ được cung cấp qua Code Mode SDK giúp mô hình kết hợp nhiều thao tác trong một chương trình TypeScript.',
+  presetMinimalName: 'Chế độ Tối giản',
+  presetMinimalDescription:
+    'Agent lập trình 2 công cụ với bash liên tục và trình chỉnh sửa str_replace_editor.',
+  presetCordisName: 'Chế độ Sáng tạo',
+  presetCordisDescription:
+    'Chuyên dùng để tạo mẫu cấu hình Agent tùy chỉnh, bao gồm toàn bộ năng lực Chế độ Chuẩn kèm theo thanh tra runtime, thử nghiệm plugin và hướng dẫn soạn thảo preset.',
+  duplicate: 'Nhân bản',
+  duplicateUnavailable: 'Bản triển khai này không có thư mục mẫu cấu hình có quyền ghi',
+  delete: 'Xóa',
+  presetId: 'Mã định danh',
+  presetIdPlaceholder: 'agent-cua-toi',
+  displayName: 'Tên hiển thị',
+  displayNamePlaceholder: 'Hiển thị trong bộ chọn; mặc định dùng mã định danh',
+  inUse: 'Đang sử dụng',
+  builtInGroup: 'Tích hợp sẵn',
+  customGroup: 'Tùy chỉnh',
+  noDescription: 'Chưa có mô tả.',
+  brokenBadge: 'Tải thất bại',
+  brokenNoCopy: 'Mẫu cấu hình tải thất bại không thể nhân bản',
+  copyOf: 'Nhân bản từ',
+  composition: 'Cấu hình tổ hợp (agent.cordis.yml)',
+  cancel: 'Hủy',
+  close: 'Đóng',
+  retry: 'Thử lại',
+  copyTitle: 'Nhân bản mẫu cấu hình',
+  copyIntro:
+    'Toàn bộ mẫu cấu hình sẽ được sao chép trên máy này. Mã định danh sẽ là tên thư mục và không thể thay đổi sau này; các nội dung khác chỉnh sửa trực tiếp trong tệp.',
+  create: 'Tạo',
+  creating: 'Đang tạo…',
+  creatorDraft: 'Soạn thảo mẫu tùy chỉnh bằng Chế độ Sáng tạo',
+  openLocation: 'Mở thư mục',
+  showLocation: 'Xem đường dẫn',
+  revealedPathLabel: 'Tệp mẫu cấu hình:',
+  idRequired: 'Vui lòng nhập mã định danh cho mẫu cấu hình.',
+  idInvalid: 'Chỉ dùng chữ cái thường, chữ số và dấu gạch nối, bắt đầu bằng chữ cái hoặc chữ số.',
+  idTaken: 'Mã định danh này đã tồn tại.',
+  deleteTitle: 'Xóa mẫu cấu hình này?',
+  deleteDescription:
+    'Thư mục mẫu cấu hình sẽ bị xóa. Các đoạn chat đang chạy trên mẫu này không bị ảnh hưởng; các đoạn chat mới sẽ không thể chọn mẫu này.',
+  deleteConfirm: 'Xóa',
+  deleting: 'Đang xóa…',
+}
+
+
 /** Preset roster fields needed to resolve Web display copy. */
 export interface PresetDisplaySource {
   /** Stable preset id. */

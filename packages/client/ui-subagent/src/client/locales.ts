@@ -79,3 +79,41 @@ export const en: Record<SubagentKey, string> = {
 
 /** Key domain of the `subagent` namespace (zh is the source of truth). */
 export type SubagentKey = keyof typeof zh
+
+/** Vietnamese dictionary, key-identical to the Chinese source of truth. */
+export const vi: Record<SubagentKey, string> = {
+  'diagnostic.corrupt': 'Bản ghi đoạn chat bị hỏng',
+  'diagnostic.unsupported': 'Phiên bản bản ghi subagent không được hỗ trợ',
+  'diagnostic.unavailable': 'Bản ghi đoạn chat tạm thời không khả dụng',
+  'duration.seconds': '{seconds}s',
+  'duration.minutes': '{minutes}p {seconds}s',
+  'duration.hours': '{hours}h {minutes}p {seconds}s',
+  'duration.days': '{days} ngày',
+  'duration.daysHours': '{days} ngày {hours} giờ',
+  'duration.months': '~{months} tháng',
+  'duration.monthsDays': '~{months} tháng {days} ngày',
+  'duration.years': '~{years} năm',
+  'duration.yearsMonths': '~{years} năm {months} tháng',
+  'duration.exactDays': '{days} ngày {hours} giờ {minutes} phút {seconds} giây',
+  'duration.exactTitle': 'Tổng thời gian hoạt động: {duration}',
+  'loading.label': 'Đang tải subagent…',
+  'loading.aria': 'Đang tải subagent',
+  'load.error': 'Không thể tải subagent',
+  'retry': 'Thử lại',
+  'mode.oneShot': 'một lần',
+  'mode.continuable': 'có thể tiếp tục',
+  'activity.running': 'đang chạy',
+  'activity.inactive': 'không chạy',
+  'branch.collapse': 'Thu gọn các nhánh con của {label}',
+  'branch.expand': 'Mở rộng các nhánh con của {label}',
+  'count.total.one': '{count} subagent',
+  'count.total.other': '{count} subagent',
+  'count.running.one': '{count} subagent đang chạy',
+  'count.running.other': '{count} subagent đang chạy',
+  'tree.aria': 'Đoạn chat subagent',
+  'readonly.oneShot.title': 'Bản ghi subagent một lần',
+  'readonly.title': 'Subagent này tạm thời ở chế độ chỉ đọc',
+  'readonly.oneShot.body': 'Tác vụ một lần không hỗ trợ gửi thêm tin nhắn; bạn có thể xem lại toàn bộ bản ghi tại đây.',
+  'readonly.body': 'Đoạn chat cha hiện đang ngoại tuyến; hãy mở lại đoạn chat cha để tiếp tục gửi tin nhắn.',
+}
+
