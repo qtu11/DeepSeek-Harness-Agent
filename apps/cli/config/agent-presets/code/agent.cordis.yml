@@ -261,3 +261,21 @@
   name: '@deepseek-ai/dsh-agent-tool-presentation'
   config:
     mode: code
+
+# ── long-term memory (MemOS 2.0) ─────────────────────────────────────────────
+- id: memos-local-memory
+  name: '@memtensor/memos-local-plugin/dist/adapters/deepseek-harness/index.js'
+  config:
+    enabled: true
+    profileId: code
+    recallEnabled: true
+    captureEnabled: true
+    toolsEnabled: true
+    hostLlmEnabled: true
+    viewerEnabled: true
+    viewerPort: 18801
+    recallTimeoutMs: 3000
+    contextMaxChars: 6000
+    toolResultMaxChars: 1200
+    failOnStartupError: false
+
