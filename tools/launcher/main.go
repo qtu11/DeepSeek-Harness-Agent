@@ -4,7 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"syscall"
+	"runtime"
 )
 
 func main() {
@@ -14,23 +14,36 @@ func main() {
 	}
 	appDir := filepath.Dir(exePath)
 
-	electronApp := filepath.Join(appDir, "dist-app", "DeepSeek Harness-win32-x64", "DeepSeek Harness.exe")
+	var electronApp string
+	switch runtime.GOOS {
+	case "windows":
+		electronApp = filepath.Join(appDir, "dist-app", "DeepSeek Harness-win32-x64", "DeepSeek Harness.exe")
+	case "darwin":
+		electronApp = filepath.Join(appDir, "dist-app", "DeepSeek Harness-darwin-x64", "DeepSeek Harness.app", "Contents", "MacOS", "DeepSeek Harness")
+		if _, err := os.Stat(electronApp); err != nil {
+			electronApp = filepath.Join(appDir, "dist-app", "DeepSeek Harness-darwin-arm64", "DeepSeek Harness.app", "Contents", "MacOS", "DeepSeek Harness")
+		}
+	case "linux":
+		electronApp = filepath.Join(appDir, "dist-app", "DeepSeek Harness-linux-x64", "DeepSeek Harness")
+		if _, err := os.Stat(electronApp); err != nil {
+			electronApp = filepath.Join(appDir, "dist-app", "DeepSeek Harness-linux-arm64", "DeepSeek Harness")
+		}
+	}
 
-	if _, err := os.Stat(electronApp); err == nil {
-		cmd := exec.Command(electronApp)
-		cmd.Dir = appDir
-		cmd.Env = os.Environ()
-		_ = cmd.Run()
-		return
+	if electronApp != "" {
+		if _, err := os.Stat(electronApp); err == nil {
+			cmd := exec.Command(electronApp)
+			cmd.Dir = appDir
+			cmd.Env = os.Environ()
+			_ = cmd.Run()
+			return
+		}
 	}
 
 	// Fallback to npx electron
 	cmd := exec.Command("npx", "electron", "apps/desktop/main.cjs")
 	cmd.Dir = appDir
 	cmd.Env = os.Environ()
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		HideWindow:    true,
-		CreationFlags: 0x08000000,
-	}
+	cmd.SysProcAttr = getSysProcAttr()
 	_ = cmd.Run()
 }
