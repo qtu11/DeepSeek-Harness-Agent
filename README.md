@@ -128,9 +128,13 @@ flowchart TD
 
 ### 2.8. Chế Độ Lập Kế Hoạch Chuyên Sâu (Plan Mode)
 - Cơ chế cách ly (Isolated Realm): Ép buộc agent thực hiện khảo sát toàn bộ codebase bằng các công cụ chỉ đọc (read-only) trước khi đưa ra kế hoạch thực thi chi tiết.
-- Khóa toàn bộ các công cụ gây biến đổi dữ liệu cho đến khi người dùng phê duyệt kế hoạch qua `exit_plan_mode`.
+- Chuyển giao tự động qua `exit_plan_mode` để người dùng phê duyệt trước khi bắt đầu ghi file hay thay đổi hệ thống.
 
-### 2.9. Tích Hợp Cầu Nối DS2API Tự Động 100% & Desktop Launcher 1-Click
+### 2.9. Đồ Thị Tri Thức Codebase & Bộ Nhớ Bài Học Work Memory (`@deepseek-ai/dsh-tool-fs-graphify`)
+- **Knowledge Graph AST (`graphify_scan`, `graphify_query`)**: Quét toàn bộ codebase (đa ngôn ngữ: TypeScript, JavaScript, Python, Go, Rust, C#, SQL, JSON/YAML), trích xuất hơn 29,000+ nodes (hàm, class, interface, endpoint API, schema bảng) và 46,000+ edges (calls, imports, defines, inherits), phát hiện các trung tâm kiến trúc (**God Nodes**), chu trình phụ thuộc vòng và phân cụm hệ thống tự động sinh `GRAPH_REPORT.md`.
+- **Work Memory & Reflection (`graphify_save_result`, `graphify_reflect`)**: Tự động lưu vết kết quả và tín hiệu kinh nghiệm (`useful`, `dead_end`, `corrected`) sau các tác vụ, chạy thuật toán tính điểm suy giảm theo thời gian (Time-decay scoring với half-life 30 ngày) sinh ra `LESSONS.md`. Mọi phiên chat mới tự động nạp `GRAPH_REPORT.md` và `LESSONS.md` vào System Prompt để AI nắm trọn vẹn kiến trúc và kinh nghiệm làm việc mà không cần đọc lại toàn bộ code.
+
+### 2.10. Tích Hợp Cầu Nối DS2API Tự Động 100% & Desktop Launcher 1-Click
 - Tự động phát hiện, biên dịch và điều phối tiến trình `ds2api.exe` chạy ngầm.
 - Giải toán Proof-of-Work (PoW) trực tiếp bằng Go engine tối ưu hóa cao.
 - Cho phép sử dụng tài khoản DeepSeek Web (`chat.deepseek.com`) dưới dạng chuẩn OpenAI API mà không cần thẻ tín dụng.
@@ -231,6 +235,10 @@ pnpm dsh --profile headless "Phân tích cấu trúc thư mục packages/ và vi
 | **`python_execute`** | `@deepseek-ai/dsh-tool-python-interpreter` | Thực thi mã Python, phân tích dữ liệu và tính toán thuật toán |
 | **`rag_search`** | `@deepseek-ai/dsh-tool-fs-rag` | Tìm kiếm ngữ nghĩa tài liệu và mã nguồn theo thuật toán BM25 |
 | **`doc_parse`** | `@deepseek-ai/dsh-tool-fs-rag` | Phân tích cấu trúc tài liệu lớn thành các phần đoạn có chỉ mục |
+| **`graphify_scan`** | `@deepseek-ai/dsh-tool-fs-graphify` | Quét AST toàn bộ codebase, xây dựng đồ thị tri thức và xuất `GRAPH_REPORT.md` |
+| **`graphify_query`** | `@deepseek-ai/dsh-tool-fs-graphify` | Truy vấn nút lân cận, chu trình phụ thuộc và đường dẫn kiến trúc trên đồ thị |
+| **`graphify_save_result`** | `@deepseek-ai/dsh-tool-fs-graphify` | Lưu vết kết quả Q&A và tín hiệu outcome (useful/dead_end/corrected) vào Work Memory |
+| **`graphify_reflect`** | `@deepseek-ai/dsh-tool-fs-graphify` | Phản tư tất định tổng hợp bài học theo thời gian sinh ra `LESSONS.md` |
 | **`web_extract`** | `@deepseek-ai/dsh-tool-web-extractor` | Tải và trích xuất nội dung bài viết web sạch dạng Markdown |
 | **`browser_navigate`** | `@deepseek-ai/dsh-tool-browser` | Mở trình duyệt Chrome/Edge và điều hướng tới trang web |
 | **`browser_click`** | `@deepseek-ai/dsh-tool-browser` | Nhấn vào phần tử theo selector, văn bản hiển thị hoặc tọa độ |

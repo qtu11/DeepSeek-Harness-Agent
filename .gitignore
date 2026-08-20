@@ -42,3 +42,5 @@ apps/web/dist/
 worktrees/
 .agents/worktrees/
 .typert-*/
+dist-release/
+graphify-out/

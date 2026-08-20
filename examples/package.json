@@ -92,6 +92,7 @@
     "@deepseek-ai/dsh-tool-fs": "workspace:*",
     "@deepseek-ai/dsh-tool-fs-search": "workspace:*",
     "@deepseek-ai/dsh-tool-fs-rag": "workspace:*",
+    "@deepseek-ai/dsh-tool-fs-graphify": "workspace:*",
     "@deepseek-ai/dsh-tool-goal": "workspace:*",
     "@deepseek-ai/dsh-tool-lsp": "workspace:*",
     "@deepseek-ai/dsh-tool-terminal": "workspace:*",

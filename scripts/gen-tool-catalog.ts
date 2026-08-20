@@ -48,6 +48,7 @@ import * as ToolCordis from '@deepseek-ai/dsh-tool-cordis'
 import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
 import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
 import * as ToolFsRag from '@deepseek-ai/dsh-tool-fs-rag'
+import * as ToolFsGraphify from '@deepseek-ai/dsh-tool-fs-graphify'
 import * as ToolStrReplaceEditor from '@deepseek-ai/dsh-tool-str-replace-editor'
 import TerminalSessionService from '@deepseek-ai/dsh-terminal'
 import * as ToolPty from '@deepseek-ai/dsh-tool-terminal'
@@ -344,6 +345,18 @@ const TOOL_PACKAGES: ToolPackage[] = [
     },
     note:
       'rag_search and doc_parse provide semantic RAG retrieval and document structure analysis inspired by Qwen-Agent.',
+  },
+  {
+    pkg: '@deepseek-ai/dsh-tool-fs-graphify',
+    dir: 'tool-fs-graphify',
+    source: 'packages/fs/tool-fs-graphify/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(ToolFsGraphify)
+    },
+    note:
+      'graphify_scan, graphify_query, graphify_save_result, and graphify_reflect provide AST Knowledge Graph mapping and Work Memory reflection.',
   },
   {
     pkg: '@deepseek-ai/dsh-tool-terminal',

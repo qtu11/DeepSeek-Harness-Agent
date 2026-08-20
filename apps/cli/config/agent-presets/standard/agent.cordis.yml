@@ -70,6 +70,12 @@
     defaultMaxChunks: 5
     defaultChunkSize: 1500
 
+- id: tool-fs-graphify
+  name: '@deepseek-ai/dsh-tool-fs-graphify'
+  config:
+    tools: true
+    autoContext: true
+
 # ── background jobs ────────────────────────────────────────────────────────
 
 # Only the model-facing controls. The task REGISTRY stays on the host plane:

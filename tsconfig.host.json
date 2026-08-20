@@ -221,6 +221,7 @@
     { "path": "./packages/fs/tool-fs" },
     { "path": "./packages/fs/tool-fs-search" },
     { "path": "./packages/fs/tool-fs-rag" },
+    { "path": "./packages/fs/tool-fs-graphify" },
     { "path": "./packages/fs/tool-str-replace-editor" },
     { "path": "./packages/compaction/compaction" },
     { "path": "./packages/compaction/compaction-basic" },
