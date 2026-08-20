@@ -24,16 +24,21 @@ for (const t of targets) {
   if (fs.existsSync(src)) {
     console.log(`Compressing ${t.folder} -> ${t.zip}...`);
     if (fs.existsSync(dest)) {
-      fs.unlinkSync(dest);
+      try {
+        fs.unlinkSync(dest);
+      } catch {}
     }
+    const cmd = `powershell -Command "Compress-Archive -Path '${src}\\*' -DestinationPath '${dest}' -Force"`;
     try {
       execSync(cmd, { stdio: 'inherit' });
       if (fs.existsSync(dest)) {
-        console.log(`Updated ${t.zip} (${(fs.statSync(dest).size / 1024 / 1024).toFixed(2)} MB)`);
+        console.log(`[Success] Updated ${t.zip} (${(fs.statSync(dest).size / 1024 / 1024).toFixed(2)} MB)`);
       }
     } catch (err) {
       console.warn(`Warning compressing ${t.folder}:`, err.message);
     }
+  } else {
+    console.warn(`[Skip] Source directory does not exist: ${src}`);
   }
 }
 
