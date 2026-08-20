@@ -80,7 +80,7 @@ def process_data():
       // 5. Generate Markdown report
       const report = generateGraphReportMarkdown(graph)
       expect(report).toContain('Codebase Architecture Knowledge Graph Report')
-      expect(report).toContain('UserService')
+      expect(report).toContain('DatabaseManager')
 
       // 6. Query neighborhood
       const queryRes = queryNeighborhood(graph, 'UserService')

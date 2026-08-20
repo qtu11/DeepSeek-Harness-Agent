@@ -1,4 +1,4 @@
-﻿# Script build toan bo DeepSeek Harness App
+# Script build toan bo DeepSeek Harness App
 Write-Host "=============================================" -ForegroundColor Cyan
 Write-Host "   DANG BUILD DEEPSEEK HARNESS STANDALONE   " -ForegroundColor Cyan
 Write-Host "=============================================" -ForegroundColor Cyan
@@ -22,7 +22,7 @@ node tools/launcher/build-electron-app.js
 
 # 4. Bien dich file khoi chay Go Launcher (Khong console den)
 Write-Host "`n[Buoc 3/3] Bien dich Go Launcher (DeepSeek Harness.exe)..." -ForegroundColor Yellow
-go build -ldflags="-H windowsgui -s -w" -o "DeepSeek Harness.exe" ./tools/launcher/main.go
+go build -ldflags="-H windowsgui -s -w" -o "DeepSeek Harness.exe" ./tools/launcher/main.go ./tools/launcher/proc_windows.go
 
 # 5. Cap nhat Desktop Shortcut
 powershell -ExecutionPolicy Bypass -File .\Tao-Shortcut-Desktop.ps1

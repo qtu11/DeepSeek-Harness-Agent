@@ -28,6 +28,12 @@
       "path": "../../core/system-prompt"
     },
     {
+      "path": "../../interaction/commands"
+    },
+    {
+      "path": "../../util/brand"
+    },
+    {
       "path": "../../runtime-diagnostics/invariants"
     }
   ]

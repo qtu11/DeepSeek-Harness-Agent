@@ -8,9 +8,11 @@ import type { Context } from '@deepseek-ai/cordis'
 import z from '@deepseek-ai/schemastery'
 import { applyGraphifyTools } from './tools.ts'
 import { applyGraphifyContextInjector } from './context-injector.ts'
+import { applyGraphifyCommands } from './commands.ts'
 
 export { applyGraphifyTools } from './tools.ts'
 export { applyGraphifyContextInjector } from './context-injector.ts'
+export { applyGraphifyCommands } from './commands.ts'
 export { scanCodebase } from './scanner.ts'
 export { buildCodebaseGraph, queryNeighborhood, queryShortestPath } from './graph.ts'
 export { saveMemoryResult, loadAllMemories } from './memory.ts'
@@ -39,7 +41,7 @@ export const Config: z<Config> = z.object({
 type ResolvedConfig = Required<Config>
 
 /**
- * Register Graphify tools and context injector in Cordis context.
+ * Register Graphify tools, commands, and context injector in Cordis context.
  */
 export function apply(ctx: Context, config: Config): void {
   const resolved = config as ResolvedConfig
@@ -49,4 +51,5 @@ export function apply(ctx: Context, config: Config): void {
   if (resolved.autoContext) {
     applyGraphifyContextInjector(ctx)
   }
+  applyGraphifyCommands(ctx)
 }
