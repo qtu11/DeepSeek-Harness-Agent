@@ -78,10 +78,10 @@ function loadEnv() {
 function isServerAlive(url) {
   return new Promise((resolve) => {
     const req = http.get(url, (res) => {
-      resolve(res.statusCode === 200);
+      resolve(res.statusCode >= 200 && res.statusCode < 400);
     });
     req.on('error', () => resolve(false));
-    req.setTimeout(1000, () => {
+    req.setTimeout(1500, () => {
       req.destroy();
       resolve(false);
     });

@@ -5,7 +5,8 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 
 const require = createRequire(import.meta.url);
-const rcedit = require('rcedit');
+const rceditModule = require('rcedit');
+const rcedit = rceditModule.rcedit || rceditModule;
 
 const ROOT_DIR = fileURLToPath(new URL('../../', import.meta.url));
 const iconPath = path.join(ROOT_DIR, 'tools/launcher/deepseek.ico');

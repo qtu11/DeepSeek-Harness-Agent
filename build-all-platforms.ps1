@@ -32,7 +32,9 @@ node tools/launcher/build-linux-deb.js
 
 # 6. Bien dich Go Launcher va nen tat ca ban phat hanh (dist-release)
 Write-Host "`n[Buoc 5/5] Bien dich Go Launcher va tao file Release (.zip, .exe, .deb)..." -ForegroundColor Yellow
-go build -ldflags="-H windowsgui -s -w" -o "DeepSeek Harness.exe" ./tools/launcher/main.go ./tools/launcher/proc_windows.go
+Push-Location tools/launcher
+go build -ldflags="-H windowsgui -s -w" -o "../../DeepSeek Harness.exe" .
+Pop-Location
 Copy-Item -Force "DeepSeek Harness.exe" "dist-release/DeepSeek-Harness-Windows.exe"
 node tools/launcher/package-release-zips.js
 
