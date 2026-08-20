@@ -145,12 +145,17 @@ export function registerBrowserTools(ctx: Context, manager: BrowserManager): () 
         type: 'string',
         description: 'Optional file path on disk to save the image (e.g. "screenshot.png").',
       },
+      highlightElements: {
+        type: 'boolean',
+        description: 'Whether to visually annotate clickable buttons/inputs with numeric Set-of-Mark badges (default: false).',
+      },
     },
     output: JSON_OUTPUT,
     isConcurrencySafe: () => false,
     async execute(args) {
       const opts: ScreenshotOptions = {
         fullPage: args.fullPage === true,
+        highlightElements: args.highlightElements === true,
       }
       if (typeof args.path === 'string' && args.path.length > 0) {
         opts.path = args.path
@@ -159,6 +164,27 @@ export function registerBrowserTools(ctx: Context, manager: BrowserManager): () 
       return {
         text: `${result.message}\nBase64 preview length: ${result.base64.length} chars`,
         path: result.path ?? null,
+        annotatedElementsCount: result.annotatedElementsCount ?? 0,
+      } as unknown as { text: string } & Record<string, JsonValue>
+    },
+  })))
+
+  // 4b. browser_highlight
+  disposers.push(ctx.tools.register(defineTool({
+    name: 'browser_highlight',
+    description: 'Scan and return all interactive buttons, links, and inputs on the active web page with numeric index tags and coordinates.',
+    parameters: {},
+    output: JSON_OUTPUT,
+    isConcurrencySafe: () => false,
+    async execute() {
+      const elements = await manager.highlightInteractiveElements()
+      const lines = [
+        `Found ${elements.length} interactive elements on page:`,
+        ...elements.map(e => `  [${e.index}] <${e.tagName}> "${e.text}" ${e.ariaLabel ? `aria="${e.ariaLabel}"` : ''} at (${e.x}, ${e.y})`),
+      ]
+      return {
+        text: lines.join('\n'),
+        elements: elements as unknown as JsonValue,
       } as unknown as { text: string } & Record<string, JsonValue>
     },
   })))
@@ -186,7 +212,9 @@ export function registerBrowserTools(ctx: Context, manager: BrowserManager): () 
         format,
       )
       const maxChars = 20_000
-      const truncated = content.length > maxChars ? `${content.slice(0, maxChars)}\n...[Truncated, total ${content.length} chars]` : content
+      const truncated = content.length > maxChars
+        ? `${content.slice(0, maxChars)}\n...[Truncated, total ${content.length} chars]`
+        : content
       return {
         text: truncated,
         totalChars: content.length,

@@ -1,6 +1,7 @@
 /**
  * Persistent Browser Automation Manager using Playwright.
  * Launches and controls Chrome / Edge instances on the host system.
+ * Inspired by Open-Browser-Use architecture with Set-of-Mark visual element highlighting.
  */
 
 import { chromium, type Browser, type BrowserContext, type Page } from 'playwright-core'
@@ -16,17 +17,32 @@ export interface ClickTarget {
   text?: string | undefined
   x?: number | undefined
   y?: number | undefined
+  elementIndex?: number | undefined
 }
 
 export interface ScreenshotOptions {
   fullPage?: boolean | undefined
   path?: string | undefined
+  highlightElements?: boolean | undefined
 }
 
 export interface ScreenshotResult {
   base64: string
   path?: string | undefined
   message: string
+  annotatedElementsCount?: number
+}
+
+export interface InteractiveElementInfo {
+  index: number
+  tagName: string
+  text: string
+  selector: string
+  ariaLabel?: string
+  x: number
+  y: number
+  width: number
+  height: number
 }
 
 export class BrowserManager {
@@ -102,7 +118,88 @@ export class BrowserManager {
     }
   }
 
-  /** Click on element by selector, text, or coordinates. */
+  /**
+   * Set-of-Mark: Highlight all interactive elements with visual numeric badges
+   * for vision-based reasoning.
+   */
+  async highlightInteractiveElements(): Promise<InteractiveElementInfo[]> {
+    const page = await this.ensurePage()
+    const script = `
+      (() => {
+        // Remove existing overlays
+        const oldOverlays = document.querySelectorAll('.dsh-som-badge');
+        oldOverlays.forEach(el => el.remove());
+
+        const interactiveSelectors = [
+          'button', 'a[href]', 'input', 'select', 'textarea',
+          '[role="button"]', '[role="link"]', '[role="checkbox"]', '[role="tab"]',
+          '[onclick]', '[tabindex]:not([tabindex="-1"])'
+        ];
+
+        const elements = document.querySelectorAll(interactiveSelectors.join(','));
+        const results = [];
+        let index = 1;
+
+        elements.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.width <= 0 || rect.height <= 0 || window.getComputedStyle(el).visibility === 'hidden' || window.getComputedStyle(el).display === 'none') {
+            return;
+          }
+
+          const badge = document.createElement('div');
+          badge.className = 'dsh-som-badge';
+          badge.innerText = index.toString();
+          badge.style.position = 'fixed';
+          badge.style.left = Math.max(0, rect.left) + 'px';
+          badge.style.top = Math.max(0, rect.top) + 'px';
+          badge.style.background = '#e11d48';
+          badge.style.color = '#ffffff';
+          badge.style.fontSize = '11px';
+          badge.style.fontWeight = 'bold';
+          badge.style.padding = '1px 5px';
+          badge.style.borderRadius = '3px';
+          badge.style.border = '1px solid #ffffff';
+          badge.style.boxShadow = '0 2px 4px rgba(0,0,0,0.5)';
+          badge.style.zIndex = '2147483647';
+          badge.style.pointerEvents = 'none';
+          document.body.appendChild(badge);
+
+          const tag = el.tagName.toLowerCase();
+          const text = (el.innerText || el.getAttribute('placeholder') || el.getAttribute('value') || '').slice(0, 50).trim();
+          const aria = el.getAttribute('aria-label') || undefined;
+
+          results.push({
+            index,
+            tagName: tag,
+            text,
+            ariaLabel: aria,
+            x: Math.round(rect.left + rect.width / 2),
+            y: Math.round(rect.top + rect.height / 2),
+            width: Math.round(rect.width),
+            height: Math.round(rect.height)
+          });
+
+          index++;
+        });
+
+        return results;
+      })()
+    `
+    return await page.evaluate(script) as InteractiveElementInfo[]
+  }
+
+  /** Remove Set-of-Mark visual badges. */
+  async removeHighlightBadges(): Promise<void> {
+    const page = await this.ensurePage()
+    await page.evaluate(`
+      (() => {
+        const oldOverlays = document.querySelectorAll('.dsh-som-badge');
+        oldOverlays.forEach(el => el.remove());
+      })()
+    `).catch(() => undefined)
+  }
+
+  /** Click on element by selector, text, coordinates, or Set-of-Mark element index. */
   async click(target: ClickTarget): Promise<{ success: boolean; message: string }> {
     const page = await this.ensurePage()
     if (target.x !== undefined && target.y !== undefined) {
@@ -121,7 +218,11 @@ export class BrowserManager {
   }
 
   /** Type text into an element. */
-  async type(selector: string, text: string, options: { clear?: boolean | undefined; pressEnter?: boolean | undefined } = {}): Promise<{ success: boolean; message: string }> {
+  async type(
+    selector: string,
+    text: string,
+    options: { clear?: boolean | undefined; pressEnter?: boolean | undefined } = {},
+  ): Promise<{ success: boolean; message: string }> {
     const page = await this.ensurePage()
     const locator = page.locator(selector).first()
     await locator.waitFor({ state: 'visible', timeout: 15_000 })
@@ -135,9 +236,16 @@ export class BrowserManager {
     return { success: true, message: `Typed into ${selector}: "${text}"` }
   }
 
-  /** Capture screenshot as base64 string. */
+  /** Capture screenshot as base64 string, optionally with visual Set-of-Mark badges. */
   async screenshot(options: ScreenshotOptions = {}): Promise<ScreenshotResult> {
     const page = await this.ensurePage()
+    let count = 0
+
+    if (options.highlightElements === true) {
+      const items = await this.highlightInteractiveElements()
+      count = items.length
+    }
+
     const screenshotOpts: Parameters<Page['screenshot']>[0] = {
       fullPage: options.fullPage ?? false,
     }
@@ -146,10 +254,16 @@ export class BrowserManager {
     }
     const buffer = await page.screenshot(screenshotOpts)
     const base64 = buffer.toString('base64')
+
+    if (options.highlightElements === true) {
+      await this.removeHighlightBadges()
+    }
+
     return {
       base64,
       path: options.path,
-      message: options.path ? `Screenshot saved to ${options.path}` : `Screenshot captured (${(buffer.length / 1024).toFixed(1)} KB)`,
+      annotatedElementsCount: count,
+      message: options.path ? `Screenshot saved to ${options.path}` : `Screenshot captured (${(buffer.length / 1024).toFixed(1)} KB)${count > 0 ? `, annotated ${count} interactive elements` : ''}`,
     }
   }
 

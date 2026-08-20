@@ -69,6 +69,14 @@
   config:
     sampleOverCapGlobResults: false
 
+- id: tool-fs-rag
+  name: '@deepseek-ai/dsh-tool-fs-rag'
+  config:
+    retrieval: true
+    parser: true
+    defaultMaxChunks: 5
+    defaultChunkSize: 1500
+
 # ── background jobs ────────────────────────────────────────────────────────
 
 # Only the model-facing controls. The task REGISTRY stays on the host plane:
@@ -252,12 +260,32 @@
     fetch: false
     searchTimeoutMs: 60000
 
+- id: tool-web-extractor
+  name: '@deepseek-ai/dsh-tool-web-extractor'
+  config:
+    enabled: true
+    defaultTimeoutMs: 25000
+
 # ── browser automation & visual inspection ──────────────────────────────────
 - id: tool-browser
   name: '@deepseek-ai/dsh-tool-browser'
   config:
     enabled: true
     headless: false
+    defaultTimeoutMs: 30000
+
+- id: tool-selenium
+  name: '@deepseek-ai/dsh-tool-selenium'
+  disabled: !!js process.platform !== 'win32'
+  config:
+    enabled: true
+    defaultTimeoutMs: 60000
+
+# ── code execution & interpreter ───────────────────────────────────────────
+- id: tool-python-interpreter
+  name: '@deepseek-ai/dsh-tool-python-interpreter'
+  config:
+    enabled: true
     defaultTimeoutMs: 30000
 
 # ── presentation ────────────────────────────────────────────────────────────

@@ -47,6 +47,7 @@ import CordisHostRunner from '@deepseek-ai/dsh-cordis-host-runner'
 import * as ToolCordis from '@deepseek-ai/dsh-tool-cordis'
 import * as ToolFs from '@deepseek-ai/dsh-tool-fs'
 import * as ToolFsSearch from '@deepseek-ai/dsh-tool-fs-search'
+import * as ToolFsRag from '@deepseek-ai/dsh-tool-fs-rag'
 import * as ToolStrReplaceEditor from '@deepseek-ai/dsh-tool-str-replace-editor'
 import TerminalSessionService from '@deepseek-ai/dsh-terminal'
 import * as ToolPty from '@deepseek-ai/dsh-tool-terminal'
@@ -63,6 +64,10 @@ import * as ToolWeb from '@deepseek-ai/dsh-tool-web'
 import VmWorkflowEngine from '@deepseek-ai/dsh-workflow-worker-thread'
 import * as ToolRalph from '@deepseek-ai/dsh-tool-ralph'
 import * as ToolWorkflow from '@deepseek-ai/dsh-tool-workflow'
+import * as ToolBrowser from '@deepseek-ai/dsh-tool-browser'
+import * as ToolPythonInterpreter from '@deepseek-ai/dsh-tool-python-interpreter'
+import * as ToolWebExtractor from '@deepseek-ai/dsh-tool-web-extractor'
+import * as ToolSelenium from '@deepseek-ai/dsh-tool-selenium'
 import { githubSlug } from './verify-md-links.ts'
 
 /** Attachment seam marker that makes the attachments-conditional `read_image` schema harvestable. */
@@ -329,6 +334,18 @@ const TOOL_PACKAGES: ToolPackage[] = [
       'glob and grep are unconditional discovery tools that spawn the packaged ripgrep binary (`@vscode/ripgrep`) through ctx.subprocess as ordinary foreground calls (never background jobs) — no host `rg` install and no shell layer. The catalog uses `sampleOverCapGlobResults: true`; deployments must choose that behavior explicitly. Capped results save the complete formatted list through the optional ctx.spillStore backend; returned locators are follow-up-readable/searchable when the backend exposes local paths in co-located deployments.',
   },
   {
+    pkg: '@deepseek-ai/dsh-tool-fs-rag',
+    dir: 'tool-fs-rag',
+    source: 'packages/fs/tool-fs-rag/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(ToolFsRag)
+    },
+    note:
+      'rag_search and doc_parse provide semantic RAG retrieval and document structure analysis inspired by Qwen-Agent.',
+  },
+  {
     pkg: '@deepseek-ai/dsh-tool-terminal',
     dir: 'tool-terminal',
     source: 'packages/terminal/tool-terminal/src/index.ts',
@@ -550,6 +567,54 @@ const TOOL_PACKAGES: ToolPackage[] = [
     },
     note:
       'web_search and web_fetch keep provider selection behind ctx.web so model-visible schemas stay stable across backend swaps.',
+  },
+  {
+    pkg: '@deepseek-ai/dsh-tool-web-extractor',
+    dir: 'tool-web-extractor',
+    source: 'packages/web/tool-web-extractor/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(ToolWebExtractor, { enabled: true })
+    },
+    note:
+      'web_extract extracts clean article Markdown from any URL, stripping boilerplate and ads.',
+  },
+  {
+    pkg: '@deepseek-ai/dsh-tool-browser',
+    dir: 'tool-browser',
+    source: 'packages/web/tool-browser/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(ToolBrowser, { enabled: true, headless: true })
+    },
+    note:
+      'browser_navigate, browser_click, browser_type, browser_screenshot, browser_highlight, and browser_eval provide full browser automation and Set-of-Mark visual inspection.',
+  },
+  {
+    pkg: '@deepseek-ai/dsh-tool-selenium',
+    dir: 'tool-selenium',
+    source: 'packages/web/tool-selenium/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(ToolSelenium, { enabled: true })
+    },
+    note:
+      'selenium_execute runs native Windows PowerShell Selenium cmdlets for browser automation.',
+  },
+  {
+    pkg: '@deepseek-ai/dsh-tool-python-interpreter',
+    dir: 'tool-python-interpreter',
+    source: 'packages/code-runtime/tool-python-interpreter/src/index.ts',
+    requires: ['ctx.tools', 'ctx.systemPrompt'],
+    writes: ['tool/call', 'tool/result'],
+    async mount(ctx) {
+      await ctx.plugin(ToolPythonInterpreter, { enabled: true })
+    },
+    note:
+      'python_execute executes Python code in a local environment for math, data analytics, and simulation.',
   },
 ]
 
