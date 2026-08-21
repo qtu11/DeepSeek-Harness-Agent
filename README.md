@@ -331,8 +331,11 @@ DeepSeek-Harness-Ds2api/
 | `pnpm run clean` | Dọn dẹp các tệp build tạm và artifact thừa |
 
 ---
+## 10. Cách tải app 
+vào "Releases" => bấm chọn tag v1.0.3 => tải bản phù hợp với hệ điều hành
+[https://files.catbox.moe/sqk5vc.png](https://files.catbox.moe/sqk5vc.png)
 
-## 10. Thông Tin Liên Hệ & Tác Quyền
+## 11. Thông Tin Liên Hệ & Tác Quyền
 
 - **Tác giả & Đơn vị phát triển**: Nguyễn Quang Tú (QTusdev)
 - **Repository chính thức**: [https://github.com/qtu11/DeepSeek-Harness-Ds2api](https://github.com/qtu11/DeepSeek-Harness-Ds2api)
