@@ -18,6 +18,8 @@
   ],
   "scripts": {
     "build": "npm run build:lib && npm run build:web",
+    "build:desktop": "node tools/launcher/build-electron-app.js",
+    "build:release": "powershell -ExecutionPolicy Bypass -File ./build-all-platforms.ps1",
     "build:lib": "npm run build:lib:host && npm run build:lib:client",
     "build:lib:host": "tsc -b tsconfig.host.json && tsdown --env.DSH_BUILD_FACE host",
     "build:lib:client": "tsc -b tsconfig.client.json && tsdown --env.DSH_BUILD_FACE client",

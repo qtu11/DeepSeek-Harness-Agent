@@ -463,7 +463,8 @@ export interface ToolRuntimeScheduler {
  * Scheduler entry point omitted from the generated named service API.
  * @internal
  */
-export const TOOL_RUNTIME_SCHEDULER: unique symbol = Symbol('@deepseek-ai/dsh-tools.scheduler')
+declare const _TOOL_RUNTIME_SCHEDULER: unique symbol
+export const TOOL_RUNTIME_SCHEDULER: typeof _TOOL_RUNTIME_SCHEDULER = Symbol.for('@deepseek-ai/dsh-tools.scheduler') as never
 
 /** Canonical error code for cancellation after a tool body was invoked. */
 export const TOOL_ABORTED = 'ABORTED'
@@ -800,6 +801,10 @@ export class ToolRuntime extends Service {
     finish: (exec, result) => this.finishScheduledExecution(exec, result),
   }
 
+  get scheduler(): ToolRuntimeScheduler {
+    return this[TOOL_RUNTIME_SCHEDULER]
+  }
+
   /** Context deferred by a running tool body, keyed by its scheduler-owned execution. */
   private deferredContexts = new WeakMap<ToolRunContext, UserMessage[]>()
   /** Executions whose tool body declared the current turn complete. */
@@ -969,7 +974,6 @@ export class ToolRuntime extends Service {
         yield ctx.systemPrompt.section(this.sdkSection())
       }
     }.bind(this), 'tools.presentAs()')
-    // oxlint-disable-next-line typescript/no-misused-promises -- synchronous composite teardown; direct return preserves disposer identity
     return dispose
   }
 

@@ -7,7 +7,7 @@ const MAX_CHARS = 20_000
 
 /** Default truncation footer; the owner passes a localized formatter. */
 function defaultTruncatedLabel(total: number): string {
-  return `… 已截断，共 ${total} 字符`
+  return `… Đã rút gọn, tổng cộng ${total} ký tự`
 }
 
 export function JsonBlock({ label, payload, defaultOpen = false, truncatedLabel = defaultTruncatedLabel }: {
@@ -23,7 +23,6 @@ export function JsonBlock({ label, payload, defaultOpen = false, truncatedLabel 
     let s: string
     try {
       // lib typing hides stringify's undefined arm (undefined/function/symbol payloads).
-      // oxlint-disable-next-line typescript/no-unnecessary-condition
       s = JSON.stringify(payload, null, 2) ?? String(payload)
     } catch {
       s = String(payload)

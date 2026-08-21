@@ -220,7 +220,7 @@ export type JoinedPresetMount = PresetMount & {
  * @returns the mount the agent joined, or undefined when it joined none.
  */
 export function standingMountFor(agentCtx: Context): JoinedPresetMount | undefined {
-  const agentKey = scopeOf(agentCtx)
+  const agentKey = scopeOf(agentCtx) ?? (agentCtx as ScopeKey)
   if (agentKey === undefined) return undefined
   const standingKey = scopeParentOf(agentKey)
   if (standingKey === undefined) return undefined

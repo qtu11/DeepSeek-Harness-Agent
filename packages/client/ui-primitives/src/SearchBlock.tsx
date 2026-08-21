@@ -123,10 +123,10 @@ function shownCount(props: SearchBlockProps): number {
  * @returns the summary text.
  */
 function summaryText(props: SearchBlockProps, shown: number, truncated: boolean, total: number): string {
-  const count = truncated ? `显示 ${shown} / 共 ${total}` : `${shown}`
+  const count = truncated ? `Hiển thị ${shown} / Tổng cộng ${total}` : `${shown}`
   return props.kind === 'paths'
-    ? `${count} 个路径`
-    : `${count} 处匹配 · ${props.files.length} 个文件`
+    ? `${count} đường dẫn`
+    : `${count} kết quả khớp · ${props.files.length} tệp`
 }
 
 /**
@@ -242,12 +242,12 @@ export function SearchBlock(props: SearchBlockProps) {
         <span className={css.summary}>{summaryText(props, shown, truncated, total)}</span>
         {!empty && (
           <button type="button" className={css.copyButton} onClick={onCopy}>
-            {copied ? '复制成功' : '复制'}
+            {copied ? 'Đã sao chép' : 'Sao chép'}
           </button>
         )}
       </div>
       {empty
-        ? <div className={css.empty}>无结果</div>
+        ? <div className={css.empty}>Không có kết quả</div>
         : (
           <div className={css.body}>
             {head.map(row => (
@@ -258,10 +258,10 @@ export function SearchBlock(props: SearchBlockProps) {
                 type="button"
                 className={css.expand}
                 aria-expanded={expanded}
-                aria-label={expanded ? '收起结果' : `展开其余 ${hidden} 行结果`}
+                aria-label={expanded ? 'Thu gọn kết quả' : `Mở rộng ${hidden} dòng kết quả còn lại`}
                 onClick={onToggle}
               >
-                {expanded ? '收起' : `… 其余 ${hidden} 行`}
+                {expanded ? 'Thu gọn' : `… Còn lại ${hidden} dòng`}
               </button>
             )}
             {tailHeader !== undefined && (

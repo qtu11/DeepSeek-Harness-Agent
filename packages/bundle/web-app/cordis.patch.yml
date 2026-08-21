@@ -280,6 +280,7 @@
     - id: dsh-find-plugin
       name: 'dsh-find-plugin'
 
+
 # ── the agent plane moves behind agent presets ─────────────────────────────
 #
 # Every row below composes what ONE agent contributes to the host registries:

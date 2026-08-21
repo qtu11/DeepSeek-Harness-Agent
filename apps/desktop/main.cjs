@@ -5,15 +5,29 @@ const { spawn } = require('node:child_process');
 const fs = require('node:fs');
 
 function findRootDir() {
-  let curr = __dirname;
-  for (let i = 0; i < 8; i++) {
-    if (fs.existsSync(path.join(curr, 'apps/cli/src/bin.ts')) || (fs.existsSync(path.join(curr, 'package.json')) && fs.existsSync(path.join(curr, 'pnpm-workspace.yaml')))) {
-      return curr;
+  const candidates = [
+    __dirname,
+    process.cwd(),
+    path.join(process.env.USERPROFILE || '', 'Desktop', 'deepseek harness'),
+    path.join(process.env.HOME || '', 'Desktop', 'deepseek harness'),
+  ];
+
+  for (const startDir of candidates) {
+    if (!startDir || !fs.existsSync(startDir)) continue;
+    let curr = startDir;
+    for (let i = 0; i < 8; i++) {
+      if (
+        fs.existsSync(path.join(curr, 'apps/cli/src/bin.ts')) ||
+        (fs.existsSync(path.join(curr, 'package.json')) && fs.existsSync(path.join(curr, 'pnpm-workspace.yaml')))
+      ) {
+        return curr;
+      }
+      const parent = path.dirname(curr);
+      if (parent === curr) break;
+      curr = parent;
     }
-    const parent = path.dirname(curr);
-    if (parent === curr) break;
-    curr = parent;
   }
+
   return path.resolve(__dirname, '../../');
 }
 

@@ -17,26 +17,29 @@ if ($LASTEXITCODE -ne 0) {
     exit $LASTEXITCODE
 }
 
-# 3. Dong goi Windows Electron Native App
-Write-Host "`n[Buoc 2/5] Dong goi Windows Electron Native App..." -ForegroundColor Yellow
+# 3. Dong goi Windows, Linux Electron Native Apps
+Write-Host "`n[Buoc 2/6] Dong goi Windows & Linux Electron Native Apps..." -ForegroundColor Yellow
 node tools/launcher/build-electron-app.js
 
-# 4. Dong goi Multi-platform (Linux x64/arm64) & macOS .app bundles
-Write-Host "`n[Buoc 3/5] Dong goi Linux x64/arm64 va macOS .app bundles..." -ForegroundColor Yellow
-node tools/launcher/build-multiplatform-apps.js
+# 4. Dong goi macOS App Bundles (.app & .command)
+Write-Host "`n[Buoc 3/6] Dong goi macOS App Bundles (darwin-x64, darwin-arm64)..." -ForegroundColor Yellow
 node tools/launcher/build-macos-app.js
 
 # 5. Dong goi Linux Debian (.deb) Packages
-Write-Host "`n[Buoc 4/5] Dong goi Linux Debian (.deb) Packages..." -ForegroundColor Yellow
+Write-Host "`n[Buoc 4/6] Dong goi Linux Debian (.deb) Packages..." -ForegroundColor Yellow
 node tools/launcher/build-linux-deb.js
 
 # 6. Bien dich Go Launcher va nen tat ca ban phat hanh (dist-release)
-Write-Host "`n[Buoc 5/5] Bien dich Go Launcher va tao file Release (.zip, .exe, .deb)..." -ForegroundColor Yellow
+Write-Host "`n[Buoc 5/6] Bien dich Go Launcher va tao file Release (.zip, .deb)..." -ForegroundColor Yellow
 Push-Location tools/launcher
 go build -ldflags="-H windowsgui -s -w" -o "../../DeepSeek Harness.exe" .
 Pop-Location
 Copy-Item -Force "DeepSeek Harness.exe" "dist-release/DeepSeek-Harness-Windows.exe"
 node tools/launcher/package-release-zips.js
+
+# 7. Dong goi 1-File Standalone Setup Installer
+Write-Host "`n[Buoc 6/6] Dong goi 1-File Standalone Setup Installer..." -ForegroundColor Yellow
+node tools/installer/build.js
 
 # Cap nhat Desktop Shortcut
 powershell -ExecutionPolicy Bypass -File .\Tao-Shortcut-Desktop.ps1

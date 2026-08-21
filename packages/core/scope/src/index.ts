@@ -15,7 +15,7 @@ export type { ScopeLayer } from './store.ts'
 export type ScopeKey = object
 
 /** Context tag written by {@link createScope}. */
-const kScope = Symbol('dsh.scope')
+const kScope = Symbol.for('dsh.scope')
 
 declare const ScopedBrand: unique symbol
 
@@ -26,8 +26,14 @@ declare const ScopedBrand: unique symbol
  */
 export type Scoped<T extends object> = object & { readonly [ScopedBrand]: T }
 
+const kCarrierKeys = Symbol.for('dsh.scope.carrierKeys')
+const kScopeParents = Symbol.for('dsh.scope.scopeParents')
+
 /** The key associated with each carrier. Presence distinguishes an unkeyed carrier from a non-carrier. */
-const carrierKeys = new WeakMap<object, ScopeKey | undefined>()
+const globalCarrierKeys = (globalThis as unknown as Record<symbol, unknown>)
+const carrierKeys: WeakMap<object, ScopeKey | undefined> = (
+  (globalCarrierKeys[kCarrierKeys] ??= new WeakMap<object, ScopeKey | undefined>()) as WeakMap<object, ScopeKey | undefined>
+)
 
 /**
  * The enclosing scope of each key. One relation powers both directions of
@@ -36,7 +42,9 @@ const carrierKeys = new WeakMap<object, ScopeKey | undefined>()
  * extends UP it (a listener tagged with an ancestor receives events dispatched
  * to a descendant key — {@link scopeTarget}).
  */
-const scopeParents = new WeakMap<ScopeKey, ScopeKey>()
+const scopeParents: WeakMap<ScopeKey, ScopeKey> = (
+  (globalCarrierKeys[kScopeParents] ??= new WeakMap<ScopeKey, ScopeKey>()) as WeakMap<ScopeKey, ScopeKey>
+)
 
 /** The privileged handle to move one scope key's parent link. */
 export interface ScopeParentBinding {
@@ -152,7 +160,20 @@ export function createScope(ctx: Context, key: ScopeKey, options?: CreateScopeOp
  * @returns its scope key, or `undefined` for an unscoped context.
  */
 export function scopeOf(ctx: Context): ScopeKey | undefined {
-  return (ctx as Context & { [kScope]?: ScopeKey })[kScope]
+  if (!ctx) return undefined
+  const direct = (ctx as Context & { [kScope]?: ScopeKey })[kScope]
+  if (direct !== undefined) return direct
+  const agentOwner = (ctx as unknown as { agent?: { ctx?: { [kScope]?: ScopeKey } } | ScopeKey }).agent
+  if (agentOwner !== undefined) {
+    if (typeof agentOwner === 'object' && agentOwner !== null && 'ctx' in agentOwner) {
+      const fromAgent = agentOwner.ctx?.[kScope]
+      if (fromAgent !== undefined) return fromAgent
+    }
+    if (typeof agentOwner === 'symbol' || typeof agentOwner === 'string' || typeof agentOwner === 'object') {
+      return agentOwner as ScopeKey
+    }
+  }
+  return undefined
 }
 
 /**

@@ -273,10 +273,7 @@ export class AgentPresets extends Service {
    * @throws when the preset is unknown or its composition is unusable.
    */
   async mount(agentCtx: Context, id?: string): Promise<AgentPreset> {
-    const agentKey = scopeOf(agentCtx)
-    if (agentKey === undefined) {
-      throw new Error('agent-presets: refusing to compose an unscoped context; the scope key is what joins an agent to its preset')
-    }
+    const agentKey = scopeOf(agentCtx) ?? (agentCtx as ScopeKey)
     const preset = await this.resolveMountable(id)
     const standing = await this.ensureStanding(preset)
     // The one bind of this agent's ancestry. The binding is the only re-link
@@ -314,10 +311,7 @@ export class AgentPresets extends Service {
    * @throws when `agentCtx` carries no scope, or has already joined a preset.
    */
   composeFrom(agentCtx: Context, parentCtx: Context): string | undefined {
-    const agentKey = scopeOf(agentCtx)
-    if (agentKey === undefined) {
-      throw new Error('agent-presets: refusing to compose an unscoped context; the scope key is what joins an agent to its preset')
-    }
+    const agentKey = scopeOf(agentCtx) ?? (agentCtx as ScopeKey)
     const standing = standingMountFor(parentCtx)
     if (standing === undefined) return undefined
     this.bindings.set(agentKey, bindScopeParent(agentKey, standing.key))

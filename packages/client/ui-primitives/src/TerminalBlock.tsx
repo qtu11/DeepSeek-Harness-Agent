@@ -55,18 +55,18 @@ export interface TerminalBlockLabels {
 }
 
 const DEFAULT_LABELS: TerminalBlockLabels = {
-  signal: signal => `信号 ${signal}`,
-  exitCode: exitCode => `退出码 ${exitCode}`,
-  running: '运行中',
-  failed: '失败',
-  done: '已完成',
-  copy: '复制',
-  copied: '复制成功',
-  noOutput: '无输出',
-  collapseAria: '收起输出',
-  collapse: '收起',
-  expandAria: hidden => `展开其余 ${hidden} 行输出`,
-  expand: hidden => `… 其余 ${hidden} 行`,
+  signal: signal => `Tín hiệu ${signal}`,
+  exitCode: exitCode => `Mã thoát ${exitCode}`,
+  running: 'Đang chạy',
+  failed: 'Thất bại',
+  done: 'Đã hoàn thành',
+  copy: 'Sao chép',
+  copied: 'Đã sao chép',
+  noOutput: 'Không có đầu ra',
+  collapseAria: 'Thu gọn đầu ra',
+  collapse: 'Thu gọn',
+  expandAria: hidden => `Mở rộng ${hidden} dòng đầu ra còn lại`,
+  expand: hidden => `… Còn lại ${hidden} dòng`,
 }
 
 export interface TerminalBlockProps {

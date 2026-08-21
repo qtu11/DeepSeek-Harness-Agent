@@ -23,7 +23,7 @@ export interface CodeBlockProps {
   copiedLabel?: string | undefined
 }
 
-export function CodeBlock({ code, lang, className, copyLabel = '复制', copiedLabel = '复制成功' }: CodeBlockProps) {
+export function CodeBlock({ code, lang, className, copyLabel = 'Sao chép', copiedLabel = 'Đã sao chép' }: CodeBlockProps) {
   const trimmed = code.endsWith('\n') ? code.slice(0, -1) : code
   // Re-render when a lazy grammar finishes loading, so a fence that showed plain
   // text while its language's grammar imported picks up highlighting. The

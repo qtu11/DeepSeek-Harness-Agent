@@ -4,11 +4,6 @@
  * preference row into the settings General section — the locale feature owns
  * its own settings surface.
  */
-/* oxlint-disable typescript/no-redundant-type-constituents --
- * `keyof LocaleNamespaceMap & string` is the declare-merge key pattern (see
- * ui-slots): in THIS unit the map holds only this package's own merges, but
- * consumers merge more namespaces in and the intersection keeps them
- * string-typed. The rule fires on the narrow-map view, not real redundancy. */
 import type { Context } from '@deepseek-ai/cordis'
 import {
   type BoundActions, type LocaleDictOf, type LocaleNamespaceMap, type Translate, type TranslateNS,
@@ -97,9 +92,9 @@ export const SETTINGS_NS = 'settings.locale'
 
 /** The shipped locales. */
 const LOCALES: readonly LocaleDefinition[] = Object.freeze([
-  { id: 'vi', label: 'Tiếng Việt' },
-  { id: 'en', label: 'English' },
   { id: 'zh', label: '中文' },
+  { id: 'en', label: 'English' },
+  { id: 'vi', label: 'Tiếng Việt' },
 ])
 
 /**
@@ -284,7 +279,11 @@ export class LocaleRuntime {
 
   private lookup(ns: string, key: string): string | undefined {
     const locales = this.dicts.get(ns)
-    return locales?.get(this.snapshot.active)?.[key] ?? locales?.get(FALLBACK_LOCALE)?.[key]
+    if (!locales) return undefined
+    return locales.get(this.snapshot.active)?.[key]
+      ?? locales.get('vi')?.[key]
+      ?? locales.get('en')?.[key]
+      ?? locales.get('zh')?.[key]
   }
 
   /**
@@ -300,6 +299,9 @@ export class LocaleRuntime {
       locales: this.snapshot.locales,
       revision: this.snapshot.revision + 1,
     })
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = active === 'zh' ? 'zh-CN' : active === 'vi' ? 'vi' : 'en'
+    }
     if (localeChanged) this.ctx.emit('locale/change', this.snapshot)
     for (const fn of [...this.listeners]) {
       try {
@@ -332,10 +334,6 @@ function resolveInitialLocale(): LocaleId {
  */
 function detectBrowserLocale(): LocaleId | undefined {
   if (typeof window === 'undefined') return undefined
-  /* oxlint-disable-next-line typescript/no-unnecessary-condition --
-   * The DOM lib types `languages` as always present; embedders and older
-   * WebViews ship a Navigator without it, and spreading undefined would
-   * throw at boot. */
   for (const tag of [...(navigator.languages ?? []), navigator.language]) {
     const primary = tag.toLowerCase().split('-')[0]
     const match = LOCALES.find(locale => locale.id === primary)

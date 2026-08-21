@@ -1,0 +1,2 @@
+#!/bin/sh
+node "C:/Users/KIMPC/Desktop/deepseek harness/apps/cli/lib/bin.js" "$@"

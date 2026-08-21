@@ -4,7 +4,7 @@ Tiếng Việt | [English](README.en.md) | [中文](README.zh.md)
 
 **DeepSeek Harness (`dsh`)** là nền tảng Autonomous AI Agent thế hệ mới mã nguồn mở, được xây dựng dựa trên kiến trúc vi nhân (Micro-kernel) của **Cordis** với triết lý thiết kế cốt lõi: **"Mọi thứ đều là Plugin" (Everything is a Plugin)**.
 
-Phiên bản **v1.0.3** là bản cập nhật đột phá toàn diện, biến DeepSeek thành một Siêu Trợ Lý AI (Super Agent) tích hợp đầy đủ khả năng: **Bộ nhớ dài hạn vĩnh viễn từng project (MemOS 2.0 + RAG BM25), chuỗi suy luận sâu DeepThink (CoT stream), Trình thông dịch Python Code Interpreter, Bóc tách nội dung Web ngữ nghĩa, Tự động hóa trình duyệt với cơ chế thị giác Set-of-Mark, Điều khiển Selenium PowerShell native, Điều phối Multi-Agent/Subagents, Lập kế hoạch Plan Mode, Quy trình Workflows DAG, và Cầu nối DS2API tự động 100% kèm ứng dụng Desktop Windows Native 1-Click (`DeepSeek Harness.exe`)**.
+Phiên bản **v1.0.3** là bản cập nhật đột phá toàn diện, biến DeepSeek thành một Siêu Trợ Lý AI (Super Agent) tích hợp đầy đủ khả năng: **Hệ sinh thái Plugin đa năng (Chợ Plugin, Thú cưng AI Desktop Pet, Task Board Kanban, Skin Center, Skill Explorer, SSH Client), Hệ thống Bộ nhớ đa tầng (Memory Spaces 8-Providers + MemOS 2.0 + AST Knowledge Graph + RAG BM25), Chuỗi suy luận sâu DeepThink (CoT stream), Trình thông dịch Python Code Interpreter, Bóc tách nội dung Web ngữ nghĩa, Tự động hóa trình duyệt với cơ chế thị giác Set-of-Mark, Điều khiển Selenium PowerShell native, Điều phối Multi-Agent/Subagents, Lập kế hoạch Plan Mode, Quy trình Workflows DAG, Cầu nối DS2API tự động 100% kèm Ứng dụng Desktop Native Đa Nền Tảng (Windows, Linux, macOS)**.
 
 ---
 
@@ -23,10 +23,26 @@ Dự án được phân phối theo giấy phép [MIT](LICENSE). Thông báo b�
 ```mermaid
 flowchart TD
     subgraph Clients["Tầng Giao Diện & Điều Khiển (Client Tier)"]
-        DesktopApp["DeepSeek Harness.exe\n(Bộ khởi chạy Windows Native 1-Click)"]
+        DesktopApp["DeepSeek Harness Desktop\n(Windows / Linux / macOS)"]
         WebUI["Web UI Dashboard\n(http://127.0.0.1:23080)"]
         MemOSViewer["MemOS Memory Viewer\n(http://127.0.0.1:18801)"]
         CLI["dsh CLI Runner\n(Code / Standard / Headless Mode)"]
+    end
+
+    subgraph PluginsEcosystem["Hệ Sinh Thái Plugin & Tiện Ích Mở Rộng (Plugin Ecosystem)"]
+        PetPlugin["Thú Cưng Đồng Hành AI\n(@linxin666/dsh-pet Live2D & Sprite)"]
+        PluginStore["Chợ Plugin Tiện Ích\n(@linxin666/dsh-client-ui-plugin-manager)"]
+        SkinCenter["Trung Tâm Giao Diện Theme\n(@linxin666/dsh-client-ui-skin-center)"]
+        TaskBoard["Bảng Nhiệm Vụ Kanban\n(@linxin666/dsh-client-ui-task-board)"]
+        SkillExplorer["Trình Khám Phá Kỹ Năng\n(@linxin666/dsh-client-ui-skill-explorer)"]
+        SSHClient["Điều Khiển SSH Máy Chủ\n(@linxin666/dsh-ssh Native Terminal)"]
+    end
+
+    subgraph MemoryTier["Hệ Thống Bộ Nhớ Đa Tầng (Multi-Tier Memory Engine)"]
+        MemorySpaces["Không Gian Bộ Nhớ Dài Hạn\n(dsh-mnemon 8-Providers Engine)"]
+        MemOSCore["MemOS 2.0 Vector Local Store\n(@memtensor/memos-local-plugin)"]
+        ASTGraph["AST Knowledge Graph & Lessons\n(@deepseek-ai/dsh-tool-fs-graphify)"]
+        BM25RAG["RAG BM25 & Doc Parser\n(@deepseek-ai/dsh-tool-fs-rag)"]
     end
 
     subgraph CoreEngine["Nhân Điều Khiển Trung Tâm (Cordis Engine)"]
@@ -37,13 +53,11 @@ flowchart TD
         JobsScheduler["Quản Lý Task Nền & Lập Lịch\n(tool-jobs & dsh-schedule)"]
     end
 
-    subgraph CapabilityPlugins["Hệ Thống Tiện Ích & Công Cụ (Capability Plugins)"]
+    subgraph CapabilityTools["Hệ Thống Công Cụ Tác Vụ (Capability Tools)"]
         PythonExec["Python Code Interpreter\n(@deepseek-ai/dsh-tool-python-interpreter)"]
-        RAGSearch["RAG BM25 & Doc Parse\n(@deepseek-ai/dsh-tool-fs-rag)"]
         WebExtract["Web Article Extractor\n(@deepseek-ai/dsh-tool-web-extractor)"]
         BrowserAuto["Browser Automation & Set-of-Mark\n(@deepseek-ai/dsh-tool-browser)"]
         SeleniumPS["Selenium PowerShell Driver\n(@deepseek-ai/dsh-tool-selenium)"]
-        MemOSPlugin["Bộ Nhớ Vĩnh Viễn MemOS 2.0\n(@memtensor/memos-local-plugin)"]
         FSPlugin["File System & Search\n(@deepseek-ai/dsh-tool-fs / -search)"]
         ShellPlugin["Shell / PowerShell Session\n(@deepseek-ai/dsh-tool-pwsh / -bash)"]
         SubagentPlugin["Subagents Swarm & Delegation\n(@deepseek-ai/dsh-tool-subagent)"]
@@ -57,7 +71,7 @@ flowchart TD
     end
 
     subgraph DS2APIBridge["Cầu Nối DS2API Proxy (:25001)"]
-        DS2APIBin["ds2api.exe Service\n(PoW Solver & Multi-Token Rotator)"]
+        DS2APIBin["ds2api Service Engine\n(PoW Solver & Multi-Token Rotator)"]
         AuthResolver["Trình Xác Thực\n(User Token / Email / Password)"]
     end
 
@@ -72,13 +86,15 @@ flowchart TD
     WebUI --> Kernel
     CLI --> Kernel
 
+    Kernel --> PluginsEcosystem
+    Kernel --> MemoryTier
     Kernel --> AgentLoop
     AgentLoop --> SessionMgr
     AgentLoop --> PlanMode
     AgentLoop --> JobsScheduler
-    AgentLoop --> CapabilityPlugins
+    AgentLoop --> CapabilityTools
 
-    CapabilityPlugins --> LLMProvider
+    CapabilityTools --> LLMProvider
     LLMProvider -->|HTTP / Stream :25001| DS2APIBin
     LLMProvider -->|Direct Official API| APIEndpoint
 
@@ -88,61 +104,84 @@ flowchart TD
 
 ---
 
-## 2. Các Năng Lực & Tiện Ích Đột Phá Trong Phiên Bản v1.0.3
+## 2. Hệ Thống Plugin & Tiện Ích Mở Rộng Độc Quyền (Plugin Ecosystem)
 
-### 2.1. Bộ Nhớ Dài Hạn Vĩnh Viễn Từng Project (MemOS 2.0 & RAG BM25)
-- **MemOS 2.0 Local Engine**: Tích hợp tầng bộ nhớ lâu dài đa lớp (L1/L2/L3), tự động thu thập tri thức quan trọng từ các cuộc hội thoại (Capture), tự động gợi ý ngữ cảnh phù hợp (Recall) cho từng dự án, hỗ trợ giao diện quản lý trực quan qua **MemOS Web Viewer** trên cổng `18801`.
-- **RAG BM25 & Document Intelligence (`@deepseek-ai/dsh-tool-fs-rag`)**:
-  - `rag_search`: Truy hồi ngữ nghĩa văn bản và mã nguồn theo thuật toán xếp hạng BM25 (Robertson-Spärck Jones IDF), phân tích chính xác đoạn mã hoặc tài liệu liên quan mà không gây tràn cửa sổ ngữ cảnh (Context Window).
-  - `doc_parse`: Phân đoạn (chunking) thông minh theo cấu trúc dòng và vùng đệm (overlap buffer) cho các tài liệu lớn.
-- **Session Persistence JSONL**: Ghi nhận toàn bộ luồng sự kiện theo chuẩn version 0, đảm bảo khôi phục trạng thái làm việc an toàn 100% khi khởi động lại.
+DeepSeek Harness sở hữu hệ sinh thái plugin giao diện người dùng và tiện ích mở rộng phong phú, được Việt hóa 100% chuẩn ngữ nghĩa:
 
-### 2.2. Chuỗi Suy Luận Sâu DeepThink (Reasoning / CoT Streaming)
-- Tự động bóc tách luồng dữ liệu suy luận `reasoning_content` delta từ DeepSeek R1/V3 thành khối tư duy logic (`reasoning block`) độc lập với khối nội dung trả lời (`text block`) và khối gọi công cụ (`tool-call`).
-- Hỗ trợ đầy đủ các mức độ điều chỉnh nỗ lực suy luận (`Reasoning Effort`): `off`, `low`, `high`, `max`.
+### 2.1. Thú Cưng Đồng Hành AI (Desktop Pet - `@linxin666/dsh-pet`)
+- **Linh vật trợ lý tương tác trực tiếp**: Hiển thị nhân vật anime/cá voi sống động ngay trên giao diện làm việc.
+- **Hỗ trợ đa chế độ hoạt họa**: Kết xuất mượt mà qua cả **Sprite Animation Atlas** (chuẩn 192x208 / 8 cột chống xé hình) và **Live2D Cubism Core**.
+- **Tương tác đa dạng**:
+  - *Cho ăn (Feed)*: Nhận cá khô khi hoàn thành nhiệm vụ lập trình, tăng điểm thân thiết.
+  - *Xoa đầu & Vuốt ve*: Phản hồi cảm xúc ngộ nghĩnh, lời thoại ấm áp.
+  - *Đổi tên & Cá nhân hóa*: Tự do đặt tên riêng cho thú cưng.
+  - *Bong bóng trạng thái (Status Bubble)*: Thông báo tiến trình suy nghĩ của AI, nhắc nhở nghỉ ngơi khi làm việc lâu.
+  - *Cấp độ thân thiết*: Từ *Cá voi con*, *Bạn đồng hành*, *Bạn thân thiết*, *Tri kỷ ăn ý*, đến *Bạn tâm giao*.
 
-### 2.3. Trình Thông Dịch Python Code Interpreter (`@deepseek-ai/dsh-tool-python-interpreter`)
-- Công cụ `python_execute`: Cho phép DeepSeek thực thi trực tiếp mã Python cục bộ trong môi trường an toàn có kiểm soát thời gian chờ (Timeout).
-- Hỗ trợ giải toán, tính toán khoa học, phân tích cấu trúc dữ liệu với `pandas`/`numpy`, mô phỏng thuật toán và tự động xuất các tệp tin kết quả/hình ảnh đồ thị.
+### 2.2. Chợ Plugin & Quản Lý Tiện Ích (`@linxin666/dsh-client-ui-plugin-manager`)
+- Tìm kiếm, cài đặt, bật/tắt và cập nhật các plugin cộng đồng chỉ với 1 cú click.
+- Tự động kiểm tra tính tương thích phiên bản vi nhân Cordis và nạp động (hot-reload) không cần khởi động lại.
 
-### 2.4. Bóc Tách Nội Dung Web Ngữ Nghĩa (`@deepseek-ai/dsh-tool-web-extractor`)
-- Công cụ `web_extract`: Tự động tải bất kỳ đường dẫn URL/website nào, loại bỏ hoàn toàn các thành phần rác (quảng cáo, scripts, css, thanh điều hướng, footer) và chuyển đổi nội dung bài viết chính thành định dạng Markdown chuẩn sạch.
+### 2.3. Bảng Quản Lý Nhiệm Vụ Kanban (`@linxin666/dsh-client-ui-task-board`)
+- Trực quan hóa tiến độ công việc của Agent theo chuẩn Kanban (Cần làm, Đang thực hiện, Chờ duyệt, Hoàn thành).
+- Phân chia nhiệm vụ con tự động từ kế hoạch Plan Mode sang các thẻ Task độc lập.
 
-### 2.5. Tự Động Hóa Trình Duyệt & Phân Tích Thị Giác Set-of-Mark (`@deepseek-ai/dsh-tool-browser`)
-- Điều khiển Chrome/Edge trực tiếp qua Playwright:
-  - `browser_navigate`: Mở trang web và kiểm tra tiêu đề/mã phản hồi HTTP.
-  - `browser_click`: Tương tác nhấn chuột theo CSS Selector, văn bản hiển thị hoặc tọa độ (X, Y).
-  - `browser_type`: Nhập dữ liệu biểu mẫu, tự động xóa trường cũ và tùy chọn nhấn phím Enter.
-  - `browser_screenshot`: Chụp ảnh màn hình toàn trang hoặc viewport để kiểm tra giao diện trực quan.
-  - `browser_content` & `browser_eval`: Trích xuất DOM text/HTML và thực thi mã JavaScript trực tiếp trên trang.
-- **Set-of-Mark Visual Numbering (`browser_highlight`)**: Tự động quét và gắn thẻ số `[1]`, `[2]`, `[3]` trực quan lên toàn bộ các nút bấm, liên kết và trường nhập liệu trên màn hình, hỗ trợ mô hình Vision AI nhận diện và thao tác chuẩn xác.
+### 2.4. Trung Tâm Giao Diện & Theme Kính Mờ (`@linxin666/dsh-client-ui-skin-center`)
+- Bộ sưu tập chủ đề hiện đại: Dark Studio, Cyberpunk Glass, Clean Light, Oceanic Blue.
+- Tùy chỉnh độ mờ Acrylic/Glassmorphism, màu sắc thanh bên và hình nền không gian làm việc.
 
-### 2.6. Điều Khiển Selenium Native Windows PowerShell (`@deepseek-ai/dsh-tool-selenium`)
-- Công cụ `selenium_execute`: Chạy các kịch bản tự động hóa trình duyệt thông qua module Selenium PowerShell (`tools/selenium-powershell/Selenium.psd1`), hỗ trợ trọn bộ cmdlets `Start-SeDriver`, `Enter-SeUrl`, `Find-SeElement`, `Invoke-SeClick`, `Send-SeKeys`, `Get-SeScreenshot`, `Stop-SeDriver`.
+### 2.5. Trình Khám Phá Kỹ Năng (Skill Explorer - `@linxin666/dsh-client-ui-skill-explorer`)
+- Tra cứu và kích hoạt hơn 100+ Skills nghiệp vụ chuyên sâu (Database Design, Frontend Aesthetics, DevOps Pipeline, Security Pentest, Algorithm Optimization).
 
-### 2.7. Quản Lý Task Nền, Lập Lịch & Workflows Đa Tác Nhân (DAG)
-- **Quản lý Task nền (`tool-jobs`)**: DeepSeek có thể chạy ngầm các lệnh dài hạn, theo dõi tiến độ, gửi dữ liệu stdin (`send_input`) và hủy tiến trình an toàn (`kill`).
-- **Lập lịch tự động (`dsh-schedule`)**: Hỗ trợ hẹn giờ một lần (Timer) và lập lịch định kỳ (Cron expressions).
-- **Điều phối Multi-Agent (`tool-subagent`, `subagent_fork`, `tool-subagent-control`)**: Khởi tạo mạng lưới agent con làm việc song song, phân nhánh ngữ cảnh và tổng hợp kết quả.
-- **Pipeline Workflows (`tool-ralph`, `tool-workflow`)**: Thực thi quy trình làm việc theo đồ thị có hướng (DAG) trên worker threads độc lập với các cổng kiểm duyệt chất lượng nghiêm ngặt.
-
-### 2.8. Chế Độ Lập Kế Hoạch Chuyên Sâu (Plan Mode)
-- Cơ chế cách ly (Isolated Realm): Ép buộc agent thực hiện khảo sát toàn bộ codebase bằng các công cụ chỉ đọc (read-only) trước khi đưa ra kế hoạch thực thi chi tiết.
-- Chuyển giao tự động qua `exit_plan_mode` để người dùng phê duyệt trước khi bắt đầu ghi file hay thay đổi hệ thống.
-
-### 2.9. Đồ Thị Tri Thức Codebase & Bộ Nhớ Bài Học Work Memory (`@deepseek-ai/dsh-tool-fs-graphify`)
-- **Knowledge Graph AST (`graphify_scan`, `graphify_query`)**: Quét toàn bộ codebase (đa ngôn ngữ: TypeScript, JavaScript, Python, Go, Rust, C#, SQL, JSON/YAML), trích xuất hơn 29,000+ nodes (hàm, class, interface, endpoint API, schema bảng) và 46,000+ edges (calls, imports, defines, inherits), phát hiện các trung tâm kiến trúc (**God Nodes**), chu trình phụ thuộc vòng và phân cụm hệ thống tự động sinh `GRAPH_REPORT.md`.
-- **Work Memory & Reflection (`graphify_save_result`, `graphify_reflect`)**: Tự động lưu vết kết quả và tín hiệu kinh nghiệm (`useful`, `dead_end`, `corrected`) sau các tác vụ, chạy thuật toán tính điểm suy giảm theo thời gian (Time-decay scoring với half-life 30 ngày) sinh ra `LESSONS.md`. Mọi phiên chat mới tự động nạp `GRAPH_REPORT.md` và `LESSONS.md` vào System Prompt để AI nắm trọn vẹn kiến trúc và kinh nghiệm làm việc mà không cần đọc lại toàn bộ code.
-
-### 2.10. Tích Hợp Cầu Nối DS2API Tự Động 100% & Desktop Launcher 1-Click
-- Tự động phát hiện, biên dịch và điều phối tiến trình `ds2api.exe` chạy ngầm.
-- Giải toán Proof-of-Work (PoW) trực tiếp bằng Go engine tối ưu hóa cao.
-- Cho phép sử dụng tài khoản DeepSeek Web (`chat.deepseek.com`) dưới dạng chuẩn OpenAI API mà không cần thẻ tín dụng.
-- Khởi chạy toàn bộ hệ thống bằng 1 cú nhấp chuột qua `DeepSeek Harness.exe`.
+### 2.6. Quản Lý Phiên SSH Native (`@linxin666/dsh-ssh`)
+- Kết nối và quản lý terminal máy chủ từ xa an toàn trực tiếp từ bảng điều khiển của DeepSeek Harness.
 
 ---
 
-## 3. Bảng Thông Số Cổng Mạng (Network Configuration)
+## 3. Hệ Thống Bộ Nhớ Đa Tầng (Advanced Multi-Tier Memory)
+
+DeepSeek Harness trang bị kiến trúc bộ nhớ 4 tầng mạnh mẽ, giải quyết triệt để vấn đề quên ngữ cảnh của các mô hình ngôn ngữ lớn:
+
+### 3.1. Không Gian Bộ Nhớ Dài Hạn (Memory Spaces - `dsh-mnemon`)
+- **Quản lý không gian tri thức độc lập**: Phân tách dữ liệu tri thức theo từng dự án hoặc từng domain nghiệp vụ riêng biệt.
+- **Tích hợp sẵn 8 Nhà cung cấp bộ nhớ (Memory Providers)**:
+  1. **Mnemon Native Store**: Bộ nhớ cục bộ tốc độ cao với SQLite & JSON persistence, hỗ trợ lệnh `remember`, `recall`, `forget`, `viz`.
+  2. **OpenViking**: Bộ nhớ ngữ nghĩa hướng API kết nối đám mây.
+  3. **Honcho**: Quản lý bối cảnh người dùng và lược sử hội thoại đa chiều.
+  4. **Mem0**: Bộ nhớ cá nhân hóa thích ứng thông minh.
+  5. **Hindsight**: Tự động phản tư và tái sử dụng kinh nghiệm xử lý lỗi trong quá khứ.
+  6. **Holographic**: Lưu trữ và ánh xạ sự kiện tri thức cấu trúc đa chiều.
+  7. **RetainDB**: Cơ sở dữ liệu tri thức bền vững cho doanh nghiệp.
+  8. **ByteRover / Supermemory**: Quản lý bộ nhớ thư mục mã nguồn và siêu dữ liệu phiên.
+- **Trực quan hóa đồ thị tri thức (`viz`)**: Xuất biểu đồ tương tác HTML thể hiện mối quan hệ giữa các insight.
+
+### 3.2. MemOS 2.0 Local Engine (`@memtensor/memos-local-plugin`)
+- Lưu trữ bộ nhớ dài hạn L1/L2/L3 cục bộ với cơ chế tìm kiếm vector nhúng.
+- Quản lý qua giao diện **MemOS Memory Viewer** tại cổng `http://127.0.0.1:18801`.
+
+### 3.3. Đồ Thị Tri Thức Codebase & Bộ Nhớ Bài Học (`@deepseek-ai/dsh-tool-fs-graphify`)
+- **AST Knowledge Graph (`graphify_scan`, `graphify_query`)**: Quét toàn bộ codebase (TypeScript, Python, Go, Rust, C#, SQL), trích xuất hơn 29,000+ nodes và 46,000+ edges, phát hiện các trung tâm kiến trúc (**God Nodes**) và tự động sinh `GRAPH_REPORT.md`.
+- **Work Memory & Reflection (`graphify_save_result`, `graphify_reflect`)**: Tự động lưu vết kết quả và tín hiệu kinh nghiệm (`useful`, `dead_end`, `corrected`) sau các tác vụ, chạy thuật toán tính điểm suy giảm theo thời gian sinh ra `LESSONS.md`. Tự động nạp vào System Prompt giúp AI luôn nắm chắc kiến trúc dự án.
+
+### 3.4. RAG BM25 & Document Intelligence (`@deepseek-ai/dsh-tool-fs-rag`)
+- Tìm kiếm ngữ nghĩa tài liệu và mã nguồn theo thuật toán xếp hạng BM25 (Robertson-Spärck Jones IDF), phân đoạn tài liệu lớn chính xác mà không gây tràn Context Window.
+
+---
+
+## 4. Các Năng Lực Cốt Lõi Khác Trong v1.0.3
+
+- **Chuỗi Suy Luận Sâu DeepThink (Reasoning / CoT Streaming)**: Bóc tách luồng `reasoning_content` delta thành khối tư duy độc lập; hỗ trợ 4 mức điều chỉnh (`off`, `low`, `high`, `max`).
+- **Python Code Interpreter (`@deepseek-ai/dsh-tool-python-interpreter`)**: Thực thi mã Python cục bộ, phân tích dữ liệu, tính toán khoa học với `numpy`/`pandas` và xuất biểu đồ hình ảnh.
+- **Bóc Tách Nội Dung Web (`@deepseek-ai/dsh-tool-web-extractor`)**: Tải URL và chuyển đổi nội dung bài viết sạch sang Markdown, loại bỏ quảng cáo và mã rác.
+- **Tự Động Hóa Trình Duyệt & Set-of-Mark (`@deepseek-ai/dsh-tool-browser`)**: Điều khiển Chromium/Chrome/Edge qua Playwright, tự động đánh số thẻ trực quan `[1]`, `[2]`, `[3]` hỗ trợ Vision AI thao tác chuẩn xác.
+- **Điều Khiển Selenium Native (`@deepseek-ai/dsh-tool-selenium`)**: Tự động hóa trình duyệt qua module Selenium PowerShell Windows native.
+- **Quản Lý Task Nền & DAG Workflows (`tool-jobs`, `tool-workflow`)**: Chạy ngầm tiến trình dài hạn, lập lịch định kỳ và điều phối đa tác nhân song song.
+- **Chế Độ Plan Mode (Explore-First)**: Buộc Agent khảo sát kỹ lưỡng codebase trước khi lập kế hoạch hành động và chờ người dùng duyệt.
+- **Cầu Nối DS2API Tự Động 100%**: Biến tài khoản web DeepSeek miễn phí thành endpoint chuẩn OpenAI API có hỗ trợ giải Proof-of-Work (PoW) tốc độ cao bằng Go.
+
+---
+
+## 5. Bảng Thông Số Cổng Mạng (Network Configuration)
 
 | Thành Phần | Cổng Mặc Định | Địa Chỉ Truy Cập | Mục Đích Sử Dụng |
 | :--- | :---: | :--- | :--- |
@@ -153,7 +192,7 @@ flowchart TD
 
 ---
 
-## 4. Cấu Hình Biến Môi Trường (`.env`)
+## 6. Cấu Hình Biến Môi Trường (`.env`)
 
 Tạo hoặc chỉnh sửa tệp `.env` tại thư mục gốc của dự án:
 
@@ -188,16 +227,41 @@ DS_USER_TOKEN=your_user_token_here
 
 ---
 
-## 5. Hướng Dẫn Khởi Chạy
+## 7. Hướng Dẫn Khởi Chạy & Đóng Gói Ứng Dụng Desktop
 
-### Cách 1: Khởi Chạy Nhanh Bằng Ứng Dụng Desktop (Windows)
-1. Mở thư mục dự án trên Windows Explorer.
-2. Nhấp đúp chuột vào tệp `DeepSeek Harness.exe`.
-3. Ứng dụng sẽ tự động kích hoạt backend, cầu nối `ds2api` và mở giao diện Web tại `http://127.0.0.1:23080`.
+### 7.1. Khởi Chạy Ứng Dụng Desktop
+
+#### Trên Windows:
+- Nhấp đúp vào tệp `DeepSeek Harness.exe` hoặc chạy từ `dist-app/DeepSeek Harness-win32-x64/DeepSeek Harness.exe`.
+- Ứng dụng tự động khởi chạy backend và mở giao diện Web tại `http://127.0.0.1:23080`.
+
+#### Trên Linux:
+- Chạy thực thi: `./dist-app/DeepSeek\ Harness-linux-x64/deepseek-harness`
+
+#### Trên macOS:
+- Mở ứng dụng từ thư mục `dist-app/DeepSeek Harness-darwin-x64/DeepSeek Harness.app` hoặc `dist-app/DeepSeek Harness-darwin-arm64/DeepSeek Harness.app`.
 
 ---
 
-### Cách 2: Khởi Chạy Bằng Dòng Lệnh (CLI / Web Mode)
+### 7.2. Hướng Dẫn Đóng Gói Desktop App (Build Desktop Across OS)
+
+DeepSeek Harness cung cấp công cụ tự động đóng gói ứng dụng Desktop sang cả 3 hệ điều hành phổ biến:
+
+```powershell
+# Chạy script đóng gói tự động toàn bộ nền tảng
+pnpm run build:desktop
+```
+
+#### Cấu trúc thư mục đầu ra trong `dist-app/`:
+- **Windows (x64)**: `dist-app/DeepSeek Harness-win32-x64/` (kèm file thực thi `DeepSeek Harness.exe` đã nạp biểu tượng PE Icon).
+- **Linux (x64)**: `dist-app/DeepSeek Harness-linux-x64/` (dành cho Ubuntu, Debian, Fedora, Arch Linux).
+- **Linux (ARM64)**: `dist-app/DeepSeek Harness-linux-arm64/` (dành cho Raspberry Pi 4/5, server ARM64).
+- **macOS (Intel & Apple Silicon)**: `dist-app/DeepSeek Harness-darwin-x64/` và `dist-app/DeepSeek Harness-darwin-arm64/`.
+
+---
+
+### 7.3. Khởi Chạy Bằng Dòng Lệnh (CLI / Web Mode)
+
 Yêu cầu Node.js >= 22.19 và pnpm >= 11.
 
 ```powershell
@@ -213,7 +277,7 @@ pnpm dsh web --port 23080
 
 ---
 
-### Cách 3: Chạy Agent Trực Tiếp Trong Terminal (Interactive CLI / Headless)
+### 7.4. Chạy Agent Trực Tiếp Trong Terminal (Interactive CLI / Headless)
 
 ```powershell
 # Chạy tương tác với Profile lập trình chuyên sâu đầy đủ công cụ (Code Preset)
@@ -228,7 +292,7 @@ pnpm dsh --profile headless "Phân tích cấu trúc thư mục packages/ và vi
 
 ---
 
-## 6. Bảng Tổng Hợp Công Cụ Model-Facing Trong v1.0.3
+## 8. Bảng Tổng Hợp Công Cụ Model-Facing Trong v1.0.3
 
 | Tên Công Cụ | Package Sở Hữu | Mô Tả Chức Năng |
 | :--- | :--- | :--- |
@@ -258,18 +322,7 @@ pnpm dsh --profile headless "Phân tích cấu trúc thư mục packages/ và vi
 
 ---
 
-## 7. Các Cấu Hình Agent Presets (Profiles)
-
-| Preset Profile | Mục Đích Sử Dụng | Các Plugin & Công Cụ Kích Hoạt |
-| :--- | :--- | :--- |
-| **`code`** | Lập trình chuyên sâu, phân tích mã nguồn, gỡ lỗi | Toàn bộ công cụ: Python Interpreter, RAG BM25, Browser Auto, Web Extractor, Selenium, MemOS 2.0, Shell, FS, LSP, Subagents, Plan Mode |
-| **`standard`** | Sử dụng hàng ngày, nghiên cứu và quản lý dự án | Python Interpreter, RAG BM25, Web Search & Extractor, Browser Auto, MemOS 2.0, FS Search, Subagents, Compaction |
-| **`minimal`** | Phản hồi văn bản tốc độ cao | DeepSeek LLM Adapter thuần túy, giao diện tương tác cơ bản |
-| **`headless`** | Tự động hóa tác vụ CI/CD và Script ngầm | Thực thi tự trị, không yêu cầu can thiệp giao diện |
-
----
-
-## 8. Cấu Trúc Thư Mục Dự Án (Repository Structure)
+## 9. Cấu Trúc Thư Mục Dự Án (Repository Structure)
 
 ```
 DeepSeek-Harness-Ds2api/
@@ -281,6 +334,11 @@ DeepSeek-Harness-Ds2api/
 ├── apps/                                 # Các ứng dụng đầu cuối
 │   ├── cli/                              # Bộ điều khiển dòng lệnh dsh CLI & Presets
 │   └── desktop/                          # Cấu hình Electron wrapper cho Desktop App
+│
+├── dist-app/                             # Các gói ứng dụng Desktop đã biên dịch
+│   ├── DeepSeek Harness-win32-x64/       # Bản phân phối Windows x64
+│   ├── DeepSeek Harness-linux-x64/       # Bản phân phối Linux x64
+│   └── DeepSeek Harness-linux-arm64/     # Bản phân phối Linux ARM64
 │
 ├── packages/                             # Hệ sinh thái các thư viện lõi (Plugin Packages)
 │   ├── code-runtime/
@@ -305,8 +363,9 @@ DeepSeek-Harness-Ds2api/
 │   └── compaction/                       # Plugin nén ngữ cảnh tự động
 │
 ├── tools/                                # Các công cụ hỗ trợ mở rộng
+│   ├── bin/                              # File thực thi tiện ích (mnemon CLI wrapper, etc.)
 │   ├── ds2api/                           # Mã nguồn Go & binary ds2api.exe (Web to API Bridge)
-│   ├── launcher/                         # Mã nguồn Go & tài nguyên Icon của DeepSeek Harness.exe
+│   ├── launcher/                         # Mã nguồn Go & kịch bản build Electron Desktop
 │   ├── memos/                            # Hệ thống bộ nhớ dài hạn MemOS 2.0
 │   ├── qwen-agent/                       # Kho thuật toán và công cụ tham chiếu Qwen-Agent
 │   └── selenium-powershell/              # Module Selenium PowerShell cho Windows
@@ -317,12 +376,13 @@ DeepSeek-Harness-Ds2api/
 
 ---
 
-## 9. Lệnh Phát Triển & Kiểm Thử Dành Cho Lập Trình Viên
+## 10. Lệnh Phát Triển & Kiểm Thử Dành Cho Lập Trình Viên
 
 | Lệnh Thực Thi | Mô Tả Chức Năng |
 | :--- | :--- |
 | `pnpm install` | Cài đặt toàn bộ dependencies cho tất cả packages |
 | `pnpm run build` | Biên dịch toàn bộ thư viện TypeScript và Web UI |
+| `pnpm run build:desktop` | Đóng gói ứng dụng Desktop đa nền tảng (Windows, Linux, macOS) |
 | `pnpm run test` | Chạy bộ kiểm thử đơn vị (Unit Tests với Vitest) |
 | `pnpm run test:coverage` | Kiểm tra tỷ lệ bao phủ mã nguồn (Coverage Gate 100%) |
 | `pnpm run test:e2e` | Chạy kiểm thử tích hợp thực tế với API |

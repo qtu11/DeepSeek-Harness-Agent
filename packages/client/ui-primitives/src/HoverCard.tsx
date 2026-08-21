@@ -30,7 +30,7 @@ import css from './HoverCard.module.css'
  */
 export function HoverCard({
   anchor, content, openDelayMs = 500, disabled = false,
-  copyText, copyLabel = '复制', copiedLabel = '复制成功',
+  copyText, copyLabel = 'Sao chép', copiedLabel = 'Đã sao chép',
 }: {
   anchor: ReactNode
   content: ReactNode

@@ -138,7 +138,7 @@ export function ReadBlock({
         <div className={css.label}>{label ?? ''}</div>
         <div className={css.action}>
           {windowed && (
-            <span className={css.count}>{`显示 ${lines.length} / ${totalLines} 行`}</span>
+            <span className={css.count}>{`Hiển thị ${lines.length} / ${totalLines} dòng`}</span>
           )}
           <span className={css.lang}>{lang ?? ''}</span>
           {/* Hide copy on an empty window, matching TerminalBlock's empty-output
@@ -147,7 +147,7 @@ export function ReadBlock({
               wipe the clipboard with an empty string. */}
           {lines.length > 0 && (
             <button type="button" className={css.copyButton} onClick={onCopy}>
-              {copied ? '复制成功' : '复制'}
+              {copied ? 'Đã sao chép' : 'Sao chép'}
             </button>
           )}
         </div>
@@ -159,10 +159,10 @@ export function ReadBlock({
             type="button"
             className={css.expand}
             aria-expanded={expanded}
-            aria-label={expanded ? '收起内容' : `展开其余 ${hidden} 行`}
+            aria-label={expanded ? 'Thu gọn nội dung' : `Mở rộng ${hidden} dòng còn lại`}
             onClick={onToggle}
           >
-            {expanded ? '收起' : `… 其余 ${hidden} 行`}
+            {expanded ? 'Thu gọn' : `… Còn lại ${hidden} dòng`}
           </button>
         )}
         {capped && rows(paired.slice(paired.length - tailLines))}
