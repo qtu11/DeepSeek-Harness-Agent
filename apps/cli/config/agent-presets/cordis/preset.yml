@@ -1,3 +1,3 @@
-name: 创造模式
-description: 用于创建自定义 Agent preset：具备标准模式的全部能力，并提供运行时检查、插件实验和 preset 创作指导。
+name: Chế độ Sáng tạo
+description: Chuyên dùng để tạo mẫu cấu hình Agent tùy chỉnh, bao gồm toàn bộ năng lực Chế độ Chuẩn kèm theo thanh tra runtime, thử nghiệm plugin và hướng dẫn soạn thảo preset.
 order: 4

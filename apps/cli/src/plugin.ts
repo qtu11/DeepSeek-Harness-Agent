@@ -12,7 +12,7 @@
 
 import { spawnSync } from 'node:child_process'
 import { existsSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { basename, join, resolve } from 'node:path'
 import {
   DEFAULT_PROFILE_BUNDLES,
   initProfile,
@@ -44,6 +44,20 @@ function exportsPatch(packageName: string, profileDir: string): boolean {
   return manifest.dsh?.bundle?.patch !== undefined
 }
 
+/** Plugins that cannot be mounted in specific profiles due to missing environment requirements or core overlaps. */
+const INCOMPATIBLE_PROFILE_BUNDLES: Record<string, Set<string>> = {
+  web: new Set([
+    '@deepseek-harness-tui/dsh-tui',
+    'dsh-find-plugin',
+    'dsh-mobile',
+  ]),
+  headless: new Set([
+    '@deepseek-harness-tui/dsh-tui',
+    'dsh-find-plugin',
+    'dsh-mobile',
+  ]),
+}
+
 /**
  * Reconcile `dsh.profile.bundles` against the installed state: pnpm has
  * already written the real installed names (so a git/path/tarball/alias spec
@@ -57,12 +71,20 @@ function exportsPatch(packageName: string, profileDir: string): boolean {
  * warning is orientation).
  */
 function reconcilePlugins(before: ProfileManifest, profileDir: string): void {
+  const profileName = basename(profileDir)
+  const blacklist = INCOMPATIBLE_PROFILE_BUNDLES[profileName]
   const after = readProfileManifest(NAME, profileDir)
   const beforeDeps = new Set(Object.keys(before.dependencies ?? {}))
   const dependencies = Object.keys(after.dependencies ?? {})
   const plugins = after.dsh?.profile?.bundles ?? []
   let changed = false
   for (const packageName of dependencies) {
+    if (blacklist?.has(packageName)) {
+      process.stderr.write(
+        `${NAME}: warning: ${packageName} is not compatible with the "${profileName}" profile and was skipped from active bundles.\n`,
+      )
+      continue
+    }
     const isBundle = exportsPatch(packageName, profileDir)
     if (isBundle && !plugins.includes(packageName)) {
       plugins.push(packageName)
@@ -76,6 +98,11 @@ function reconcilePlugins(before: ProfileManifest, profileDir: string): void {
   }
   const dependencySet = new Set(dependencies)
   for (const packageName of [...plugins]) {
+    if (blacklist?.has(packageName)) {
+      plugins.splice(plugins.indexOf(packageName), 1)
+      changed = true
+      continue
+    }
     // Only dependency-managed entries are subject to removal; template
     // bundles (dsh-base and friends) are not dependencies.
     const wasDependency = beforeDeps.has(packageName) || dependencySet.has(packageName)

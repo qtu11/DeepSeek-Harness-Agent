@@ -32,8 +32,42 @@ interface Ds2ApiConfig {
   }
 }
 
+import { homedir } from 'node:os'
+
 /**
- * Synchronize config.json for ds2api from environment variables.
+ * Load tokens and credentials directly from .env files.
+ */
+function loadEnvTokens(): { token?: string; email?: string; password?: string } {
+  const envPaths = [
+    join(ROOT_DIR, '.env'),
+    join(process.cwd(), '.env'),
+    join(homedir(), '.dsh', '.env'),
+  ]
+  const result: { token?: string; email?: string; password?: string } = {}
+  for (const envPath of envPaths) {
+    if (!existsSync(envPath)) continue
+    try {
+      const content = readFileSync(envPath, 'utf8')
+      for (const line of content.split('\n')) {
+        const trimmed = line.trim()
+        if (!trimmed || trimmed.startsWith('#')) continue
+        const match = /^([A-Z0-9_]+)=(.*)$/i.exec(trimmed)
+        if (!match || match[1] === undefined || match[2] === undefined) continue
+        const key = match[1]
+        const val = match[2].trim().replace(/^['"]|['"]$/g, '')
+        if (key === 'DS_USER_TOKEN' || key === 'DEEPSEEK_USER_TOKEN') result.token = val
+        if (key === 'DS_EMAIL' || key === 'DEEPSEEK_EMAIL') result.email = val
+        if (key === 'DS_PASSWORD' || key === 'DEEPSEEK_PASSWORD') result.password = val
+      }
+    } catch {
+      // Ignore read errors
+    }
+  }
+  return result
+}
+
+/**
+ * Synchronize config.json for ds2api from environment variables and .env.
  */
 function syncDs2ApiConfig(): Ds2ApiConfig {
   let config: Ds2ApiConfig = {}
@@ -53,26 +87,29 @@ function syncDs2ApiConfig(): Ds2ApiConfig {
     config.api_keys = [{ key: DS2API_LOCAL_KEY, name: 'DeepSeek Harness Local Key', remark: 'Auto-configured' }]
   }
 
-  // Synchronize account token if present in environment
-  const userToken = process.env.DS_USER_TOKEN ?? process.env.DEEPSEEK_USER_TOKEN ?? (
+  const diskEnv = loadEnvTokens()
+  const userToken = process.env.DS_USER_TOKEN ?? process.env.DEEPSEEK_USER_TOKEN ?? diskEnv.token ?? (
     process.env.DEEPSEEK_API_KEY && !process.env.DEEPSEEK_API_KEY.startsWith('sk-') ? process.env.DEEPSEEK_API_KEY : undefined
   )
 
-  const email = process.env.DS_EMAIL ?? process.env.DEEPSEEK_EMAIL
-  const password = process.env.DS_PASSWORD ?? process.env.DEEPSEEK_PASSWORD
+  const email = process.env.DS_EMAIL ?? process.env.DEEPSEEK_EMAIL ?? diskEnv.email
+  const password = process.env.DS_PASSWORD ?? process.env.DEEPSEEK_PASSWORD ?? diskEnv.password
 
   if (!config.accounts || config.accounts.length === 0) {
     config.accounts = [{
-      name: 'DSH DeepSeek Account',
+      name: 'DeepSeek Web Account',
       remark: 'DeepSeek Web Account',
       token: userToken ?? '',
       ...email ? { email } : {},
       ...password ? { password } : {},
     }]
-  } else if (config.accounts[0] !== undefined && (userToken || email || password)) {
-    if (userToken) config.accounts[0].token = userToken
-    if (email) config.accounts[0].email = email
-    if (password) config.accounts[0].password = password
+  } else {
+    const first = config.accounts[0]
+    if (first) {
+      if (userToken) first.token = userToken
+      if (email) first.email = email
+      if (password) first.password = password
+    }
   }
 
   // Ensure models alias

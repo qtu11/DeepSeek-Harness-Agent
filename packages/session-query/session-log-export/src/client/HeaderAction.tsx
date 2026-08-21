@@ -22,7 +22,7 @@ export function SessionLogDownloadHeaderAction(props: SessionLogDownloadDialogPr
         aria-busy={busy}
         onClick={() => { void request(sessionId) }}
       >
-        <span>Session log</span>
+        <span>{props.t('action.button')}</span>
         <IconDownloadOutline16 size={12} />
       </button>
       <SessionLogDownloadDialog {...props} />

@@ -112,25 +112,32 @@ async function startBackendIfNeeded() {
 
   const binJs = path.join(ROOT_DIR, 'apps', 'cli', 'lib', 'bin.js');
   const binTs = path.join(ROOT_DIR, 'apps', 'cli', 'src', 'bin.ts');
+  const logFile = path.join(__dirname, 'backend.log');
+  const logStream = fs.createWriteStream(logFile, { flags: 'a' });
 
-  if (fs.existsSync(binJs)) {
-    backendProcess = spawn('node', [binJs, 'web', '--port', WEB_PORT], {
-      cwd: ROOT_DIR,
-      env: { ...process.env, PORT: WEB_PORT },
-      stdio: 'ignore',
-      windowsHide: true,
-    });
-  } else {
-    backendProcess = spawn('node', ['--import', 'tsx/esm', binTs, 'web', '--port', WEB_PORT], {
-      cwd: ROOT_DIR,
-      env: { ...process.env, PORT: WEB_PORT },
-      stdio: 'ignore',
-      windowsHide: true,
-    });
+  const spawnArgs = fs.existsSync(binJs)
+    ? ['node', [binJs, 'web', '--port', WEB_PORT]]
+    : ['node', ['--import', 'tsx/esm', binTs, 'web', '--port', WEB_PORT]];
+
+  backendProcess = spawn(spawnArgs[0], spawnArgs[1], {
+    cwd: ROOT_DIR,
+    env: { ...process.env, PORT: WEB_PORT },
+    stdio: ['ignore', 'pipe', 'pipe'],
+    windowsHide: true,
+  });
+
+  if (backendProcess.stdout) {
+    backendProcess.stdout.pipe(logStream);
+  }
+  if (backendProcess.stderr) {
+    backendProcess.stderr.pipe(logStream);
   }
 
   backendProcess.on('error', (err) => {
     console.error('Failed to start backend:', err);
+    try {
+      fs.appendFileSync(logFile, `\n[error] ${err.stack || err.message}\n`);
+    } catch {}
   });
 }
 
@@ -180,6 +187,18 @@ function createWindow() {
     mainWindow.setIcon(appImage);
   }
 
+  // Register developer shortcuts (F12 for DevTools, F5/Ctrl+R for Reload)
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.type !== 'keyDown') return;
+    if (input.key === 'F12' || (input.control && input.shift && input.key.toLowerCase() === 'i')) {
+      mainWindow.webContents.toggleDevTools();
+      event.preventDefault();
+    } else if (input.key === 'F5' || (input.control && input.key.toLowerCase() === 'r')) {
+      mainWindow.webContents.reload();
+      event.preventDefault();
+    }
+  });
+
   // Open external links in default browser
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith('http:') || url.startsWith('https:')) {
@@ -191,8 +210,37 @@ function createWindow() {
     return { action: 'allow' };
   });
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
+  let shown = false;
+  const showOnce = () => {
+    if (!shown && mainWindow) {
+      shown = true;
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  };
+
+  mainWindow.once('ready-to-show', showOnce);
+
+  // Fallback: force-show after 5s even if ready-to-show never fires
+  setTimeout(showOnce, 5000);
+
+  mainWindow.webContents.on('did-fail-load', (_ev, code, desc, url) => {
+    console.error(`[desktop] did-fail-load: ${code} ${desc} @ ${url}`);
+    // Auto-retry load once after delay if server is starting up
+    setTimeout(() => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.loadURL(WEB_URL);
+      }
+    }, 1500);
+    showOnce();
+  });
+
+  mainWindow.webContents.on('render-process-gone', (_ev, details) => {
+    console.error('[desktop] render-process-gone:', details.reason);
+  });
+
+  mainWindow.webContents.on('console-message', (_ev, level, msg) => {
+    if (level >= 2) console.error(`[renderer] ${msg}`);
   });
 
   mainWindow.on('closed', () => {
@@ -209,7 +257,7 @@ app.whenReady().then(async () => {
   if (!ready) {
     dialog.showErrorBox(
       'Lỗi khởi động DeepSeek Harness',
-      `Máy chủ không phản hồi tại ${WEB_URL}. Vui lòng kiểm tra lại môi trường.`
+      `Máy chủ không phản hồi tại ${WEB_URL}. Vui lòng kiểm tra lại môi trường hoặc file backend.log.`
     );
     app.quit();
     return;

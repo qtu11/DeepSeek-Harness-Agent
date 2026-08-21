@@ -1,0 +1,32 @@
+{
+  "accounts": [
+    {
+      "name": "DeepSeek Web Account",
+      "remark": "DeepSeek Web Account",
+      "token": "gsIaxFfXtl9DICJPjQSSWd9wgBapHCEyZxGIdD7YKq576M6F9umMirolQLls6fqL"
+    }
+  ],
+  "api_keys": [
+    {
+      "key": "sk-ds2api-dsh-local",
+      "name": "DeepSeek Harness Local Key",
+      "remark": "Auto-configured"
+    }
+  ],
+  "auto_delete": {},
+  "keys": [
+    "sk-ds2api-dsh-local"
+  ],
+  "model_aliases": {
+    "deepseek-v4-flash": "deepseek-v4-flash",
+    "deepseek-v4-pro": "deepseek-v4-flash",
+    "deepseek-chat": "deepseek-v4-flash",
+    "deepseek-reasoner": "deepseek-v4-flash"
+  },
+  "runtime": {
+    "account_max_inflight": 2,
+    "account_max_queue": 0,
+    "global_max_inflight": 0,
+    "token_refresh_interval_hours": 6
+  }
+}

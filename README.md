@@ -391,9 +391,14 @@ DeepSeek-Harness-Ds2api/
 | `pnpm run clean` | Dọn dẹp các tệp build tạm và artifact thừa |
 
 ---
-## 10. Cách tải app 
+## 10. Cách tải app
 vào "Releases" => bấm chọn tag v1.0.3 => tải bản phù hợp với hệ điều hành
+Hỗ trợ linux, windows và macos
 ![QTusdev](https://files.catbox.moe/sqk5vc.png)
+
+
+Tôi đã build bản tiếng việt và add thêm plugins, các bạn cũng có thể add plugins từ repo "https://github.com/awesome-dsh-plugin/awesome-dsh-plugin.git" nhé.
+![QTusdev](https://files.catbox.moe/70sf8d.png)
 
 ## 11. Thông Tin Liên Hệ & Tác Quyền
 
