@@ -44,3 +44,9 @@ worktrees/
 .typert-*/
 dist-release/
 graphify-out/
+*.exe
+*.zip
+*.deb
+tools/installer/temp-win-app/
+tools/installer/payload.zip
+plugins/awesome-dsh-plugin/

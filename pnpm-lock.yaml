@@ -1491,6 +1491,12 @@ importers:
       commander:
         specifier: ^15.0.0
         version: 15.0.0
+      dsh-find-plugin:
+        specifier: ^0.3.7
+        version: 0.3.7(@deepseek-ai/cordis@vendor+cordis)(@deepseek-ai/dsh-tools@packages+core+tools)
+      dshmarket:
+        specifier: ^1.15.0
+        version: 1.15.0(@deepseek-ai/cordis@vendor+cordis)(@deepseek-ai/dsh-settings@packages+settings+settings)
     devDependencies:
       '@deepseek-ai/cordis':
         specifier: workspace:^
@@ -12876,6 +12882,21 @@ packages:
   domutils@3.2.2:
     resolution: {integrity: sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==}
 
+  dsh-find-plugin@0.3.7:
+    resolution: {integrity: sha512-yqvG58ci3+c7DsNJ515TFyu8IK5Jc249DQma8wQ2DavUpmU9avzKAyZ8V41tHB5mZrC09xrEhNFcZzj3qgODtQ==}
+    peerDependencies:
+      '@deepseek-ai/cordis': ^4.0.1
+      '@deepseek-ai/dsh-tools': ^0.1.0-rc.6
+
+  dshmarket@1.15.0:
+    resolution: {integrity: sha512-E69XJp5jPOdALLml4Rbc8WX0WvdHs8WHdPuoP8408dLdNUDEX9lipIaCiqvjtsUmWPZ6pY83DAtDtvm+6ZAPnA==}
+    peerDependencies:
+      '@deepseek-ai/cordis': ^4.0.1
+      '@deepseek-ai/dsh-settings': ^0.1.0-rc.7
+    peerDependenciesMeta:
+      '@deepseek-ai/dsh-settings':
+        optional: true
+
   dts-resolver@3.0.0:
     resolution: {integrity: sha512-1T1f+z+4tl9XD+m+0HBgWoL/nm0bOIffyWaUuUSBlFg/86IWvfx+wjNaO/ybU0AJzG9/Mi5hBUgGV6zCmWEN7Q==}
     engines: {node: ^22.18.0 || >=24.0.0}
@@ -15191,6 +15212,10 @@ packages:
 
   undici@7.28.0:
     resolution: {integrity: sha512-cRZYrTDwWznlnRiPjggAGxZXanty6M8RV1ff8Wm4LWXBp7/IG8v5DnOm74DtUBp9OONpK75YlPnIjQqX0dBDtA==}
+    engines: {node: '>=20.18.1'}
+
+  undici@7.29.0:
+    resolution: {integrity: sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==}
     engines: {node: '>=20.18.1'}
 
   unicorn-magic@0.3.0:
@@ -19112,6 +19137,19 @@ snapshots:
       domelementtype: 2.3.0
       domhandler: 5.0.3
 
+  dsh-find-plugin@0.3.7(@deepseek-ai/cordis@vendor+cordis)(@deepseek-ai/dsh-tools@packages+core+tools):
+    dependencies:
+      '@deepseek-ai/cordis': link:vendor/cordis
+      '@deepseek-ai/dsh-tools': link:packages/core/tools
+
+  dshmarket@1.15.0(@deepseek-ai/cordis@vendor+cordis)(@deepseek-ai/dsh-settings@packages+settings+settings):
+    dependencies:
+      '@deepseek-ai/cordis': link:vendor/cordis
+      js-yaml: 4.2.0
+      undici: 7.29.0
+    optionalDependencies:
+      '@deepseek-ai/dsh-settings': link:packages/settings/settings
+
   dts-resolver@3.0.0(oxc-resolver@11.20.0):
     optionalDependencies:
       oxc-resolver: 11.20.0
@@ -21892,6 +21930,8 @@ snapshots:
   undici-types@8.3.0: {}
 
   undici@7.28.0: {}
+
+  undici@7.29.0: {}
 
   unicorn-magic@0.3.0: {}
 

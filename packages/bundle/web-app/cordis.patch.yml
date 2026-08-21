@@ -273,6 +273,13 @@
     - id: ui-trajectory
       name: '@deepseek-ai/dsh-client-ui-trajectory'
 
+    # Community Marketplace and Plugin Discovery from awesome-dsh-plugin
+    - id: dshmarket
+      name: 'dshmarket'
+
+    - id: dsh-find-plugin
+      name: 'dsh-find-plugin'
+
 # ── the agent plane moves behind agent presets ─────────────────────────────
 #
 # Every row below composes what ONE agent contributes to the host registries:
