@@ -333,7 +333,7 @@ DeepSeek-Harness-Ds2api/
 ---
 ## 10. Cách tải app 
 vào "Releases" => bấm chọn tag v1.0.3 => tải bản phù hợp với hệ điều hành
-[https://files.catbox.moe/sqk5vc.png](https://files.catbox.moe/sqk5vc.png)
+![QTusdev](https://files.catbox.moe/sqk5vc.png)
 
 ## 11. Thông Tin Liên Hệ & Tác Quyền
 
